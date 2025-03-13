@@ -7,6 +7,7 @@ import { JobDescriptionForm } from '@components/ats-optimizer/JobDescriptionForm
 import { ActionButtons } from '@components/ats-optimizer/ActionButtons';
 import { AnalysisResult } from '@components/ats-optimizer/AnalysisResult';
 import { useATSOptimizerStore } from '@lib/store/ats-optimizer';
+import { RefreshCw } from 'lucide-react';
 
 export function ATSOptimizer() {
   const {
@@ -61,11 +62,10 @@ export function ATSOptimizer() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-upwork-gray">
-            ATS Resume Optimizer
-          </h1>
+          <h1 className="text-2xl font-bold text-upwork-gray">ATS Resume Optimizer</h1>
           <p className="mt-1 text-sm text-upwork-gray-light">
             {atsAnalysis 
               ? 'Review your ATS analysis and optimization suggestions below.'
@@ -73,49 +73,60 @@ export function ATSOptimizer() {
           </p>
         </div>
         {atsAnalysis && (
-          <Button variant="outline" onClick={handleReset} className="shrink-0">
+          <Button 
+            variant="outline" 
+            onClick={handleReset} 
+            className="flex items-center gap-2 w-full sm:w-auto justify-center"
+          >
+            <RefreshCw className="w-4 h-4" />
             Start New Analysis
           </Button>
         )}
       </div>
 
-      {!atsAnalysis ? (
-        // Input Form View
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-          <section className="space-y-4 sm:space-y-6">
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <CVUploader
-                cvContent={cvContent}
-                onFileChange={handleFileChange}
-                fileInputRef={fileInputRef}
-              />
-            </div>
-
-            <JobDescriptionForm
-              jobDescription={jobDescription}
-              onJobDescriptionChange={setJobDescription}
+      {/* Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Form Section */}
+        <div className="space-y-4">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <CVUploader
+              cvContent={cvContent}
+              onFileChange={handleFileChange}
+              fileInputRef={fileInputRef}
             />
+          </div>
 
-            <ActionButtons
-              onGenerate={handleGenerate}
-              onReset={handleReset}
-              isGenerating={isGenerating}
-              isDisabled={!cvContent || !jobDescription}
-            />
-          </section>
+          <JobDescriptionForm
+            jobDescription={jobDescription}
+            onJobDescriptionChange={setJobDescription}
+          />
 
-          <section className="hidden lg:block bg-white rounded-lg shadow overflow-hidden">
-            <div className="flex items-center justify-center h-full p-6 text-center text-upwork-gray-light">
-              <p className="text-lg">ATS analysis will appear here once generated.</p>
+          <ActionButtons
+            onGenerate={handleGenerate}
+            onReset={handleReset}
+            isGenerating={isGenerating}
+            isDisabled={!cvContent || !jobDescription}
+          />
+        </div>
+
+        {/* Preview Section - Fixed height and scrollable */}
+        <div className="h-[calc(100vh-12rem)] sticky top-24">
+          {atsAnalysis ? (
+            <div className="h-full overflow-y-auto bg-white rounded-lg shadow-sm">
+              <AnalysisResult analysis={atsAnalysis} />
             </div>
-          </section>
+          ) : (
+            <div className="bg-white rounded-lg shadow-sm p-6 h-full flex items-center justify-center">
+              <div className="text-center text-upwork-gray-light">
+                <p className="text-lg mb-2">Your ATS analysis will appear here</p>
+                <p className="text-sm">
+                  Upload your CV and enter the job description to get started
+                </p>
+              </div>
+            </div>
+          )}
         </div>
-      ) : (
-        // Analysis Result View
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <AnalysisResult analysis={atsAnalysis} />
-        </div>
-      )}
+      </div>
     </div>
   );
 }

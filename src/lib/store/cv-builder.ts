@@ -11,7 +11,6 @@ interface CVBuilderState {
 }
 
 const initialCVData: CVData = {
-  headline: '',
   fullName: '',
   title: '',
   contact: {

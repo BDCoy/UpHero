@@ -34,7 +34,7 @@ export const signupValidationSchemas = {
 
   plan: Yup.object({
     planType: Yup.string()
-      .oneOf(['free', 'pro', 'enterprise'], 'Invalid plan type')
+      .oneOf(['free', 'pro', 'pro_3months'], 'Invalid plan type')
       .required('Please select a plan')
   })
 };

@@ -7,14 +7,14 @@ import type { AnalysisResultProps } from './types';
 
 export function AnalysisResult({ analysis }: AnalysisResultProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
+    <div className="divide-y divide-upwork-background">
       {/* Score Card - Full width */}
-      <div className="lg:col-span-2">
+      <div className="p-6">
         <ScoreCard score={analysis.score} />
       </div>
 
       {/* Keywords Section */}
-      <div className="bg-white rounded-lg p-4">
+      <div className="p-6">
         <KeywordsSection
           foundKeywords={analysis.foundKeywords}
           missingKeywords={analysis.missingKeywords}
@@ -22,15 +22,15 @@ export function AnalysisResult({ analysis }: AnalysisResultProps) {
       </div>
 
       {/* Recommendations Section */}
-      <div className="bg-white rounded-lg p-4">
+      <div className="p-6">
         <Recommendations
           recommendations={analysis.recommendations}
           skillGaps={analysis.skillGaps}
         />
       </div>
 
-      {/* Formatting Section - Full width */}
-      <div className="lg:col-span-2 bg-white rounded-lg p-4">
+      {/* Formatting Section */}
+      <div className="p-6">
         <Formatting
           formatIssues={analysis.formatIssues}
           improvementSuggestions={analysis.improvementSuggestions}

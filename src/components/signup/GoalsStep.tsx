@@ -106,7 +106,7 @@ export function GoalsStep({ onNext, onBack, initialData }: GoalsStepProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[450px] scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-upwork-background pr-2">
+        <div className="grid grid-cols-1 gap-4 py-4 overflow-y-auto max-h-[450px] scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-upwork-background pr-2">
           {AVAILABLE_GOALS.map((goal) => {
             const isSelected = formik.values.goals.includes(goal.id);
             const Icon = goal.icon;

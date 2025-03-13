@@ -1,4 +1,4 @@
-import { BarChart, FileSearch, FileText, CheckSquare, FileSpreadsheet } from 'lucide-react';
+import { BarChart, FileSearch, FileText, CheckSquare, FileSpreadsheet, MessageSquare } from 'lucide-react';
 
 export const sidebarLinks = [
   {
@@ -25,5 +25,10 @@ export const sidebarLinks = [
     name: 'CV Builder',
     path: '/dashboard/cv-builder',
     icon: FileSpreadsheet
+  },
+  {
+    name: 'Proposal Generator',
+    path: '/dashboard/proposal-generator',
+    icon: MessageSquare
   }
 ] as const;

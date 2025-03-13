@@ -4,7 +4,7 @@ import type { ScoreCardProps } from './types';
 
 export function ScoreCard({ score }: ScoreCardProps) {
   return (
-    <div className="flex items-center justify-between bg-white rounded-lg p-6 mb-6">
+    <div className="flex items-center justify-between bg-white rounded-lg">
       <div className="flex items-center space-x-4">
         <div className="bg-upwork-green/10 p-3 rounded-full">
           <Star className="h-8 w-8 text-upwork-green" />

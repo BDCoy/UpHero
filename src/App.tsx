@@ -16,6 +16,7 @@ import { ProfileAnalysis } from '@pages/dashboard/ProfileAnalysis';
 import { CoverLetter } from '@pages/dashboard/CoverLetter';
 import { ATSOptimizer } from '@pages/dashboard/ATSOptimizer';
 import { CVBuilder } from '@pages/dashboard/CVBuilder';
+import { ProposalGenerator } from '@pages/dashboard/ProposalGenerator';
 import { Settings } from '@pages/dashboard/Settings';
 import { SubscriptionChange } from '@pages/dashboard/SubscriptionChange';
 import { ToastContainer } from '@components/Toast';
@@ -78,6 +79,16 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <CVBuilder />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/proposal-generator"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <ProposalGenerator />
                 </DashboardLayout>
               </ProtectedRoute>
             }

@@ -1,5 +1,4 @@
 export interface CVData {
-  headline: string;
   fullName: string;
   title: string;
   contact: {
@@ -81,37 +80,4 @@ export interface PreviewProps {
 export interface StylesEditorProps {
   styles: CVStyles;
   onUpdate: (styles: Partial<CVStyles>) => void;
-}
-
-export interface SectionProps {
-  title: string;
-  children: React.ReactNode;
-}
-
-export interface ExperienceItemProps {
-  item: CVData['workExperience'][0];
-  onUpdate: (item: CVData['workExperience'][0]) => void;
-  onDelete: () => void;
-}
-
-export interface EducationItemProps {
-  item: CVData['education'][0];
-  onUpdate: (item: CVData['education'][0]) => void;
-  onDelete: () => void;
-}
-
-export interface AchievementItemProps {
-  item: CVData['achievements'][0];
-  onUpdate: (item: CVData['achievements'][0]) => void;
-  onDelete: () => void;
-}
-
-export interface SkillsEditorProps {
-  skills: CVData['skills'];
-  onUpdate: (skills: CVData['skills']) => void;
-}
-
-export interface LanguagesEditorProps {
-  languages: CVData['languages'];
-  onUpdate: (languages: CVData['languages']) => void;
 }
