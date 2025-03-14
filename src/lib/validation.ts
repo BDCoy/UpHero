@@ -1,42 +1,43 @@
-import * as Yup from 'yup';
+import * as Yup from "yup";
+import { PLAN_IDS } from "./revolut";
 
 export const signupValidationSchemas = {
   account: Yup.object({
     email: Yup.string()
-      .email('Invalid email address')
-      .required('Email is required'),
+      .email("Invalid email address")
+      .required("Email is required"),
     password: Yup.string()
-      .min(8, 'Password must be at least 8 characters')
-      .required('Password is required'),
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password')], 'Passwords must match')
-      .required('Please confirm your password'),
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .required("Please confirm your password"),
     fullName: Yup.string()
-      .min(2, 'Full name must be at least 2 characters')
-      .required('Full name is required')
+      .min(2, "Full name must be at least 2 characters")
+      .required("Full name is required"),
   }),
 
   contact: Yup.object({
     phone: Yup.string()
-      .min(10, 'Phone number must be at least 10 digits')
-      .required('Phone number is required'),
+      .min(10, "Phone number must be at least 10 digits")
+      .required("Phone number is required"),
     city: Yup.string()
-      .min(2, 'City must be at least 2 characters')
-      .required('City is required')
+      .min(2, "City must be at least 2 characters")
+      .required("City is required"),
   }),
 
   goals: Yup.object({
     goals: Yup.array()
       .of(Yup.string())
-      .min(1, 'Select at least one goal')
-      .required('Please select at least one goal')
+      .min(1, "Select at least one goal")
+      .required("Please select at least one goal"),
   }),
 
   plan: Yup.object({
     planType: Yup.string()
-      .oneOf(['free', 'pro', 'pro_3months'], 'Invalid plan type')
-      .required('Please select a plan')
-  })
+      .oneOf(["free", "pro", "pro_3months"], "Invalid plan type")
+      .required("Please select a plan"),
+  }),
 };
 
 export type SignupFormData = {
@@ -48,5 +49,5 @@ export type SignupFormData = {
   country: string;
   city: string;
   goals: string[];
-  planType: 'free' | 'pro' | 'enterprise';
+  planType: PLAN_IDS;
 };

@@ -1,0 +1,44 @@
+[functions.payment-status-updater]
+enabled = true
+verify_jwt = false
+import_map = "./functions/payment-status-updater/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/payment-status-updater/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/payment-status-updater/*.html" ]
+
+[functions.payment-status-checker]
+enabled = true
+verify_jwt = true
+import_map = "./functions/payment-status-checker/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/payment-status-checker/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/payment-status-checker/*.html" ]
+
+
+[functions.create-order]
+enabled = true
+verify_jwt = true
+import_map = "./functions/create-order/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/create-order/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/create-order/*.html" ]
+
+[functions.renew_subscription_payments]
+enabled = true
+verify_jwt = true
+import_map = "./functions/renew_subscription_payments/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/renew_subscription_payments/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/renew_subscription_payments/*.html" ]
