@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { supabase } from "@lib/supabase";
+import { User } from "@supabase/supabase-js";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
-  user: any;
+  user: User | null;
   loading: boolean;
   checkAuth: () => Promise<void>;
   signOut: () => Promise<void>;

@@ -27,7 +27,6 @@ export function SubscriptionChange() {
     if (!data) {
       toast.info("No subscription found");
     } else {
-      console.log(data.state);
       if (data.state === "completed") {
         setCurrentPlanId(data.selected_plan);
       }
@@ -40,11 +39,12 @@ export function SubscriptionChange() {
   }, []);
 
   // Exclude free trial from selection
-  const availablePlans = SUBSCRIPTION_PLANS.filter(
-    (plan) => plan.id !== "free"
-  );
+  const availablePlans = SUBSCRIPTION_PLANS;
 
   const handlePlanChange = async (planId: PLAN_IDS) => {
+    if (planId === "free") {
+      return;
+    }
     setSelectedPlanId(planId);
     setIsCheckoutVisible(true);
   };
@@ -83,7 +83,7 @@ export function SubscriptionChange() {
 
       {!isCheckoutVisible ? (
         <div className="py-10">
-          <div className="grid grid-cols-1 gap-6 max-w-3xl m-auto lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6  m-auto lg:grid-cols-4">
             {availablePlans.map((plan) => {
               const isCurrentPlan = plan.id === currentPlanId;
               return (
@@ -96,9 +96,9 @@ export function SubscriptionChange() {
                   } bg-white overflow-hidden`}
                 >
                   {plan.popular && (
-                    <div className="absolute top-8 right-4 -translate-y-1/2">
-                      <div className="inline-flex items-center rounded-full bg-upwork-green px-4 py-1 text-sm font-semibold text-white">
-                        <Star className="w-4 h-4 mr-1" />
+                    <div className="absolute top-5 right-2 -translate-y-1/2">
+                      <div className="inline-flex items-center rounded-full bg-upwork-green px-2 py-1 text-xs font-semibold text-white">
+                        <Star className="w-3 h-3 mr-1" />
                         Most Popular
                       </div>
                     </div>
@@ -129,12 +129,14 @@ export function SubscriptionChange() {
                       <Button
                         variant={isCurrentPlan ? "outline" : "primary"}
                         className="w-full"
-                        disabled={isCurrentPlan}
+                        disabled={isCurrentPlan || plan.id === "free"}
                         onClick={() => handlePlanChange(plan.id)}
                       >
                         {isCurrentPlan
                           ? "Current Plan"
-                          : "Switch to " + plan.name}
+                          : plan.id === "free"
+                          ? "Expired"
+                          : "Upgrade"}
                       </Button>
                     </div>
                   </div>

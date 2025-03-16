@@ -1,8 +1,7 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Logo } from '../Logo';
-import { Settings, LogOut, X } from 'lucide-react';
-import { sidebarLinks } from './navigation';
+import { Link, useLocation } from "react-router-dom";
+import { Logo } from "../Logo";
+import { Settings, LogOut, X } from "lucide-react";
+import { sidebarLinks } from "./navigation";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -39,8 +38,8 @@ export function Sidebar({ onClose, onSignOut }: SidebarProps) {
                   onClick={onClose}
                   className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-upwork-background text-upwork-green'
-                      : 'text-upwork-gray-light hover:bg-upwork-background hover:text-upwork-gray'
+                      ? "bg-upwork-background text-upwork-green"
+                      : "text-upwork-gray-light hover:bg-upwork-background hover:text-upwork-gray"
                   }`}
                 >
                   <Icon className="mr-3 h-5 w-5 flex-shrink-0" />

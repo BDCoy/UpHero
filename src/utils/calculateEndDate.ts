@@ -4,16 +4,19 @@ const calculateEndDate = (plan: string): string => {
 
   switch (plan) {
     case "free":
-      endDate = new Date(today.setDate(today.getDate() + 3)); // 3 days from now
+      endDate = new Date(today.setDate(today.getDate() + 14)); // 14 days from now
       break;
-    case "pro":
+    case "freelancer":
       endDate = new Date(today.setMonth(today.getMonth() + 1)); // 1 month from now
       break;
-    case "pro_3months":
-      endDate = new Date(today.setMonth(today.getMonth() + 3)); // 3 months from now
+    case "freelancer_pro":
+      endDate = new Date(today.setMonth(today.getMonth() + 1)); // 1 month from now
+      break;
+    case "freelancer_agency":
+      endDate = new Date(today.setMonth(today.getMonth() + 1)); // 1 month from now
       break;
     default:
-      endDate = today; // Fallback, should not happen
+      endDate = new Date(today.setMonth(today.getMonth() + 1)); // Fallback, should not happen
       break;
   }
 

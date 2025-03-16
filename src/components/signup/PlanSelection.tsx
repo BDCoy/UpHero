@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import { Button } from "../Button";
 import { SUBSCRIPTION_PLANS } from "@/lib/revolut/constants";
-import { Clock, Shield, Star } from "lucide-react";
+import { Clock, Star } from "lucide-react";
 
 interface PlanSelectionProps {
   formik: ReturnType<typeof useFormik>;
@@ -10,7 +10,11 @@ interface PlanSelectionProps {
   onBack: () => void;
 }
 
-export const PlanSelection: React.FC<PlanSelectionProps> = ({ formik, setIsCheckoutVisible, onBack }) => {
+export const PlanSelection: React.FC<PlanSelectionProps> = ({
+  formik,
+  setIsCheckoutVisible,
+  onBack,
+}) => {
   return (
     <div>
       <div className="text-center mb-8">
@@ -18,7 +22,9 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({ formik, setIsCheck
           <Clock className="w-4 h-4 mr-2" />
           Limited Time Offer - Save up to 50%
         </div>
-        <h2 className="text-2xl font-bold text-upwork-gray">Choose Your Plan</h2>
+        <h2 className="text-2xl font-bold text-upwork-gray">
+          Choose Your Plan
+        </h2>
         <p className="mt-2 text-upwork-gray-light">
           Unlock your freelancing potential today
         </p>
@@ -33,7 +39,9 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({ formik, setIsCheck
             <label
               key={plan.id}
               className={`relative flex flex-col p-6 border rounded-xl cursor-pointer hover:border-upwork-green hover:bg-upwork-background transition-all duration-200 ${
-                isCurrentPlan ? "border-upwork-green bg-upwork-background ring-2 ring-upwork-green ring-opacity-50" : "border-gray-200"
+                isCurrentPlan
+                  ? "border-upwork-green bg-upwork-background ring-2 ring-upwork-green ring-opacity-50"
+                  : "border-gray-200"
               }`}
             >
               {plan.popular && (
@@ -60,10 +68,16 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({ formik, setIsCheck
                 <div className="ml-4 flex-1">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold text-upwork-gray">{plan.name}</h3>
+                      <h3 className="text-lg font-semibold text-upwork-gray">
+                        {plan.name}
+                      </h3>
                       <div className="flex items-baseline mt-1">
-                        <span className="text-2xl font-bold text-upwork-gray">${plan.price}</span>
-                        <span className="ml-1 text-upwork-gray-light">{plan.period}</span>
+                        <span className="text-2xl font-bold text-upwork-gray">
+                          ${plan.price}
+                        </span>
+                        <span className="ml-1 text-upwork-gray-light">
+                          {plan.period}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -71,7 +85,10 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({ formik, setIsCheck
                   {isFree && (
                     <div className="mt-3 p-3 bg-orange-50 border border-orange-100 rounded-lg">
                       <p className="text-sm text-orange-700">
-                        Start with a <strong>Free Trial</strong>. After 3 days, you'll be automatically charged <strong>$15/month</strong> for the Pro Plan unless you cancel.
+                        Start with a <strong>Free Trial</strong>. After 14 days,
+                        you'll be automatically charged{" "}
+                        <strong>{SUBSCRIPTION_PLANS[1].price}$</strong> for the{" "}
+                        {SUBSCRIPTION_PLANS[1].name} Plan unless you cancel.
                       </p>
                     </div>
                   )}
@@ -79,10 +96,20 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({ formik, setIsCheck
                   <ul className="mt-4 space-y-2">
                     {plan.features.map((feature, index) => (
                       <li key={index} className="flex items-start">
-                        <svg className="h-5 w-5 text-upwork-green flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        <svg
+                          className="h-5 w-5 text-upwork-green flex-shrink-0"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
                         </svg>
-                        <span className="ml-2 text-sm text-upwork-gray-light">{feature}</span>
+                        <span className="ml-2 text-sm text-upwork-gray-light">
+                          {feature}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -94,8 +121,17 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({ formik, setIsCheck
       </div>
 
       <div className="flex bottom-0 pt-6 mt-6 border-t border-upwork-background bg-white">
-        <Button type="button" variant="outline" onClick={onBack} className="w-full mr-2">Back</Button>
-        <Button type="submit" className="w-full ml-2">Continue</Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onBack}
+          className="w-full mr-2"
+        >
+          Back
+        </Button>
+        <Button type="submit" className="w-full ml-2">
+          Continue
+        </Button>
       </div>
     </div>
   );

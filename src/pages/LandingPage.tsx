@@ -170,7 +170,7 @@ export function LandingPage() {
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-4">
             {SUBSCRIPTION_PLANS.map((plan) => (
               <div
                 key={plan.name}

@@ -3,7 +3,6 @@ import {
   FileSearch,
   FileText,
   CheckSquare,
-  FileSpreadsheet,
   MessageSquare,
 } from "lucide-react";
 

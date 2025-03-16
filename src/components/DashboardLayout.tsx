@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthProvider";
-import { supabase } from "../lib/supabase";
 import { Sidebar } from "./dashboard/Sidebar";
 import { Navbar } from "./dashboard/Navbar";
 import { Loader2 } from "lucide-react";
+import { checkUserStatus } from "@/lib/auth/authUtils";
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { signOut } = useAuth();
@@ -12,38 +12,15 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  console.log(loading);
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/signin");
   };
 
-  // Validate that the user's signup is complete.
   useEffect(() => {
-    const checkSignupCompletion = async () => {
-      try {
-        const { data } = await supabase.auth.getUser();
-        if (data.user) {
-          const { data: profile, error } = await supabase
-            .from("profiles")
-            .select("signup_completed")
-            .eq("id", data.user.id)
-            .single();
-          // If there's an error or signup_completed is false, redirect to /signup.
-          if (error || !profile?.signup_completed) {
-            navigate("/signup");
-            return;
-          }
-        }
-      } catch (error) {
-        console.error("Error checking signup status:", error);
-        navigate("/signup");
-        return;
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkSignupCompletion();
+    checkUserStatus(navigate, setLoading);
   }, [navigate]);
 
   if (loading) {
@@ -70,7 +47,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <Sidebar onClose={() => setIsMobileMenuOpen(false)} onSignOut={handleSignOut} />
+        <Sidebar
+          onClose={() => setIsMobileMenuOpen(false)}
+          onSignOut={handleSignOut}
+        />
       </div>
 
       {/* Sidebar for desktop */}
@@ -80,7 +60,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main content */}
       <div className="flex flex-1 flex-col md:pl-64">
-        <Navbar onOpenSidebar={() => setIsMobileMenuOpen(true)} onSignOut={handleSignOut} />
+        <Navbar
+          onOpenSidebar={() => setIsMobileMenuOpen(true)}
+          onSignOut={handleSignOut}
+        />
 
         <main className="flex-1 bg-upwork-background">
           <div className="py-6">

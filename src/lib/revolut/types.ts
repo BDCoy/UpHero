@@ -58,7 +58,8 @@ export interface SubscriptionPlan {
   popular?: boolean;
 }
 
-export type PLAN_IDS = "free" | "pro" | "pro_3months";
+export type PLAN_IDS = "free" | "freelancer" | "freelancer_pro" | "freelancer_agency";
+
 
 export type PAYMENT_STATE =
   | "pending"
