@@ -5,10 +5,10 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     id: "free",
     name: "Free Trial",
     price: 0,
-    period: "/month",
+    period: "/3 days",
     features: [
       "Basic profile analysis",
-      "3 AI-generated proposals per month",
+      "3 AI-generated proposals",
       "Limited CV Builder access",
       "Community support",
     ],
@@ -23,7 +23,10 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
       "Unlimited AI proposals",
       "Priority support",
       "Custom training",
+      "Analytics dashboard",
+      "Premium templates",
     ],
+    popular: true
   },
   {
     id: "pro_3months",
@@ -31,10 +34,13 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     price: 45,
     period: "/3 months",
     features: [
-      "Advanced profile optimization",
-      "Unlimited AI proposals",
-      "Priority support",
-      "Custom training",
+      "Everything in Pro Plan",
+      "Save 13% vs monthly",
+      "Priority feature access",
+      "Advanced analytics",
+      "Dedicated success manager",
+      "Custom API access",
     ],
   },
+  
 ];

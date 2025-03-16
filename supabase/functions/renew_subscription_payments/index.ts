@@ -5,7 +5,12 @@ import {
   sandboxApiUrl,
   SUBSCRIPTION_PLANS,
 } from "../_shared/constants.ts";
-import { PLAN_IDS, RevolutOrder, RevolutSubscription } from "../_shared/interfaces.ts";
+import {
+  PLAN_IDS,
+  RevolutOrder,
+  RevolutSubscription,
+} from "../_shared/interfaces.ts";
+import { calculateEndDate } from "../_shared/utils.ts";
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -22,8 +27,8 @@ const apiUrl = isProd ? prodApiUrl : sandboxApiUrl; // Use prod or sandbox URL b
 
 // Get the correct Revolut credentials based on environment
 const revolutSecretKey = isProd
-  ? Deno.env.get("VITE_REVOLUT_PROD_SECRET_KEY")
-  : Deno.env.get("VITE_REVOLUT_DEV_SECRET_KEY");
+  ? Deno.env.get("REVOLUT_PROD_SECRET_KEY")
+  : Deno.env.get("REVOLUT_DEV_SECRET_KEY");
 
 export async function updateSubscriptionStatus(
   id: string,
@@ -39,6 +44,7 @@ export async function updateSubscriptionStatus(
       state: newState,
       selected_plan: newOrder.metadata.selectedPlan,
       checkout_url: newOrder.checkout_url,
+      metadata: newOrder.metadata,
     };
     const { error } = await supabase
       .from("subscriptions")
@@ -113,7 +119,7 @@ const createSubscriptionOrder = async (orderData: {
   currency: string;
   customerId: string;
   metadata: {
-    selectedPlan: PLAN_IDS
+    selectedPlan: PLAN_IDS;
     endDate: string;
     email?: string;
     user_id?: string;
@@ -225,57 +231,74 @@ serve(async (req) => {
         );
         console.log("Payment method", paymentMethodsResponse);
 
-        const savedPaymentMethod = {
-          id: paymentMethodsResponse.id, // This should be dynamically fetched or passed as required
-          type: paymentMethodsResponse.type,
-          initiator: "merchant",
-        };
+        // Check if allowed payment method
+        if (
+          paymentMethodsResponse &&
+          (paymentMethodsResponse.type === "card" ||
+            paymentMethodsResponse.type === "revolut_pay")
+        ) {
+          // Payment method is allowed: continue processing payment.
+          // (Your existing payment logic goes here.)
+          console.log(
+            `Processing payment for subscription ${subscription.id} using ${paymentMethodsResponse.type}.`
+          );
 
-        const endDate = new Date();
-        let totalMonths;
-        if (subscription.selected_plan === "pro") {
-          totalMonths = 1;
-        } else if (subscription.selected_plan === "pro_3months") {
-          totalMonths = 3;
+          const savedPaymentMethod = {
+            id: paymentMethodsResponse.id, // This should be dynamically fetched or passed as required
+            type: paymentMethodsResponse.type,
+            initiator: "merchant",
+          };
+
+          const endDateString = calculateEndDate(subscription.selected_plan);
+
+          // Create the metadata object with required details
+          const metadata = {
+            endDate: endDateString,
+            user_id: subscription.user_id, // Assuming user_id is stored in the subscription
+            email: profile.email, // Email fetched from profiles table
+            selectedPlan: subscription.selected_plan, // Set to "monthly" as requested
+          };
+          const proPlan = SUBSCRIPTION_PLANS[1];
+          const orderData = {
+            amount:
+              subscription.selected_plan === "free"
+                ? proPlan.price
+                : subscription.amount, // Amount in the currency (e.g., USD)
+            currency: "USD", // Currency of the payment
+            customerId,
+            metadata,
+          };
+
+          console.log("metadata:", metadata);
+
+          console.log("order data:", orderData);
+
+          const createdOrder = await createSubscriptionOrder(orderData);
+
+          const paymentResponse = await payForOrder(
+            createdOrder.id,
+            savedPaymentMethod
+          );
+          console.log(`Payment response: ${JSON.stringify(paymentResponse)}`);
+
+          await updateSubscriptionStatus(
+            subscription.id,
+            createdOrder,
+            "processing"
+          );
+        } else {
+          // Payment method not allowed: mark subscription as failed.
+          const { error: updateError } = await supabase
+            .from("subscriptions")
+            .update({ state: "failed" })
+            .eq("id", subscription.id);
+
+          if (updateError) {
+            errors.push(
+              `Error updating subscription ${subscription.id} to failed: ${updateError.message}`
+            );
+          }
         }
-        endDate.setMonth(endDate.getMonth() + totalMonths); // Add 1 month to the current date
-        const endDateString = endDate.toISOString(); // Convert to ISO string
-
-        // Create the metadata object with required details
-        const metadata = {
-          endDate: endDateString, // Date 1 month from today
-          user_id: subscription.user_id, // Assuming user_id is stored in the subscription
-          email: profile.email, // Email fetched from profiles table
-          selectedPlan: subscription.selected_plan, // Set to "monthly" as requested
-        };
-        const proPlan = SUBSCRIPTION_PLANS[1];
-        const orderData = {
-          amount:
-            subscription.selected_plan === "free"
-              ? proPlan.price
-              : subscription.amount, // Amount in the currency (e.g., USD)
-          currency: "USD", // Currency of the payment
-          customerId,
-          metadata,
-        };
-
-        console.log("metadata:", metadata);
-
-        console.log("order data:", orderData);
-
-        const createdOrder = await createSubscriptionOrder(orderData);
-
-        const paymentResponse = await payForOrder(
-          createdOrder.id,
-          savedPaymentMethod
-        );
-        console.log(`Payment response: ${JSON.stringify(paymentResponse)}`);
-
-        await updateSubscriptionStatus(
-          subscription.id,
-          createdOrder,
-          "processing"
-        );
       } catch (err) {
         // Handle any error that occurred while processing this subscription
         errors.push(

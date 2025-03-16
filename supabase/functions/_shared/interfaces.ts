@@ -1,4 +1,3 @@
-// Define RevolutOrder interface
 export interface RevolutOrder {
   id: string;
   token: string;
@@ -14,19 +13,19 @@ export interface RevolutOrder {
   updated_at: string;
   amount: number;
   currency: string;
-  outstanding_amount: number;
+  outstanding_amount?: number;
   capture_mode: "automatic" | "manual";
   checkout_url: string;
   metadata: {
-    endDate: string;
-    user_id: string;
-    email: string;
+    endDate?: string;
+    user_id?: string;
+    email?: string;
     selectedPlan: string;
   };
   enforce_challenge: "automatic" | "manual";
   customer: {
     id: string;
-    email: string;
+    email?: string;
   };
 }
 
@@ -42,6 +41,12 @@ export interface RevolutSubscription {
   checkout_url: string;
   created_at: string;
   updated_at: string;
+  metadata: {
+    endDate?: string;
+    user_id?: string;
+    email?: string;
+    selectedPlan: string;
+  };
 }
 
 export interface SubscriptionPlan {
@@ -50,6 +55,7 @@ export interface SubscriptionPlan {
   price: number;
   period: string;
   features: string[];
+  popular?: true;
 }
 
 export type PLAN_IDS = "free" | "pro" | "pro_3months";

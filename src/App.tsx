@@ -15,11 +15,11 @@ import { Dashboard } from '@pages/Dashboard';
 import { ProfileAnalysis } from '@pages/dashboard/ProfileAnalysis';
 import { CoverLetter } from '@pages/dashboard/CoverLetter';
 import { ATSOptimizer } from '@pages/dashboard/ATSOptimizer';
-import { CVBuilder } from '@pages/dashboard/CVBuilder';
 import { ProposalGenerator } from '@pages/dashboard/ProposalGenerator';
 import { Settings } from '@pages/dashboard/Settings';
 import { SubscriptionChange } from '@pages/dashboard/SubscriptionChange';
 import { ToastContainer } from '@components/Toast';
+import { PaymentSuccessPage } from './pages/PaymentSuccessPage';
 
 function App() {
   return (
@@ -28,6 +28,7 @@ function App() {
         <Routes>
           {/* Auth pages */}
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/payment-success" element={<PaymentSuccessPage/>} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -69,16 +70,6 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <ATSOptimizer />
-                </DashboardLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/dashboard/cv-builder"
-            element={
-              <ProtectedRoute>
-                <DashboardLayout>
-                  <CVBuilder />
                 </DashboardLayout>
               </ProtectedRoute>
             }

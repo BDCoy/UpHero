@@ -16,6 +16,7 @@ export const registerSubscription = async (
         state: order.state,
         selected_plan: order.metadata.selectedPlan,
         checkout_url: order.checkout_url,
+        metadata: order.metadata,
       },
     ]);
 
@@ -120,4 +121,27 @@ export const verifyPaymentStatus = async (
     console.error("Error verifying payment status:", error);
     return "failed"; // Return a default state in case of an error
   }
+};
+
+export const getCurrentSubscription = async (
+  userId: string
+): Promise<RevolutSubscription | null> => {
+  const { data, error } = await supabase
+    .from("subscriptions")
+    .select("*")
+    .eq("user_id", userId)
+    .neq("state", "pending")
+    .neq("state", "processing")
+    .neq("state", "authorised")
+    .neq("state", "failed")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error("Error fetching current subscription:", error);
+    return null;
+  }
+
+  return data ?? null;
 };

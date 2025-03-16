@@ -18,15 +18,21 @@ interface AccountStepProps {
   error?: string | null;
 }
 
-export function AccountStep({ 
-  onNext, 
-  initialData, 
-  isLoading = false, 
-  onGoogleSignIn, 
-  error 
+export function AccountStep({
+  onNext,
+  initialData,
+  isLoading = false,
+  onGoogleSignIn,
+  error,
 }: AccountStepProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Common input styles
+  const baseInputClass =
+    'appearance-none block w-full px-3 py-2 rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green';
+  const getInputClass = (touched: boolean | undefined, errorMsg: string | undefined) =>
+    `${baseInputClass} border ${touched && errorMsg ? 'border-red-300' : 'border-upwork-gray-lighter'}`;
 
   const formik = useFormik({
     initialValues: initialData,
@@ -37,9 +43,13 @@ export function AccountStep({
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="space-y-6">
+    <form
+      onSubmit={formik.handleSubmit}
+      className="space-y-6 animate-fade-down animate-once animate-duration-500"
+    >
+      {/* Full Name */}
       <div>
-        <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="fullName" className="block text-sm font-medium text-upwork-gray">
           Full Name
         </label>
         <div className="mt-1">
@@ -52,12 +62,10 @@ export function AccountStep({
               const capitalizedName = e.target.value
                 .toLowerCase()
                 .replace(/\b\w/g, (char) => char.toUpperCase());
-              formik.setFieldValue("fullName", capitalizedName);
+              formik.setFieldValue('fullName', capitalizedName);
             }}
             onBlur={formik.handleBlur}
-            className={`appearance-none block w-full px-3 py-2 border ${
-              formik.touched.fullName && formik.errors.fullName ? 'border-red-300' : 'border-gray-300'
-            } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+            className={getInputClass(formik.touched.fullName, formik.errors.fullName)}
           />
           {formik.touched.fullName && formik.errors.fullName && (
             <p className="mt-2 text-sm text-red-600">{formik.errors.fullName}</p>
@@ -65,8 +73,9 @@ export function AccountStep({
         </div>
       </div>
 
+      {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="email" className="block text-sm font-medium text-upwork-gray">
           Email address
         </label>
         <div className="mt-1">
@@ -75,9 +84,7 @@ export function AccountStep({
             {...formik.getFieldProps('email')}
             type="email"
             autoComplete="email"
-            className={`appearance-none block w-full px-3 py-2 border ${
-              formik.touched.email && formik.errors.email ? 'border-red-300' : 'border-gray-300'
-            } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+            className={getInputClass(formik.touched.email, formik.errors.email)}
           />
           {formik.touched.email && formik.errors.email && (
             <p className="mt-2 text-sm text-red-600">{formik.errors.email}</p>
@@ -85,24 +92,23 @@ export function AccountStep({
         </div>
       </div>
 
+      {/* Password */}
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="password" className="block text-sm font-medium text-upwork-gray">
           Password
         </label>
         <div className="mt-1 relative">
           <input
             id="password"
             {...formik.getFieldProps('password')}
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             autoComplete="new-password"
-            className={`appearance-none block w-full px-3 py-2 pr-10 border ${
-              formik.touched.password && formik.errors.password ? 'border-red-300' : 'border-gray-300'
-            } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+            className={`${getInputClass(formik.touched.password, formik.errors.password)} pr-10`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-upwork-gray-light hover:text-upwork-gray"
           >
             {showPassword ? (
               <EyeOff className="h-5 w-5" aria-hidden="true" />
@@ -116,24 +122,23 @@ export function AccountStep({
         </div>
       </div>
 
+      {/* Confirm Password */}
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="confirmPassword" className="block text-sm font-medium text-upwork-gray">
           Confirm Password
         </label>
         <div className="mt-1 relative">
           <input
             id="confirmPassword"
             {...formik.getFieldProps('confirmPassword')}
-            type={showConfirmPassword ? "text" : "password"}
+            type={showConfirmPassword ? 'text' : 'password'}
             autoComplete="new-password"
-            className={`appearance-none block w-full px-3 py-2 pr-10 border ${
-              formik.touched.confirmPassword && formik.errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-            } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+            className={`${getInputClass(formik.touched.confirmPassword, formik.errors.confirmPassword)} pr-10`}
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-upwork-gray-light hover:text-upwork-gray"
           >
             {showConfirmPassword ? (
               <EyeOff className="h-5 w-5" aria-hidden="true" />
@@ -147,30 +152,34 @@ export function AccountStep({
         </div>
       </div>
 
-      {error && (
-        <p className="text-sm text-red-600 text-center">{error}</p>
-      )}
+      {/* Error Message */}
+      {error && <p className="text-sm text-red-600 text-center">{error}</p>}
 
-      <Button type="submit" className="w-full" disabled={isLoading || !formik.isValid || formik.isSubmitting}>
+      {/* Next Button */}
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={isLoading || !formik.isValid || formik.isSubmitting}
+      >
         {isLoading ? 'Creating account...' : 'Next'}
       </Button>
 
+      {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300" />
+          <div className="w-full border-t border-upwork-gray-lighter" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-500">
-            Or continue with
-          </span>
+          <span className="px-2 bg-white text-upwork-gray-light">Or continue with</span>
         </div>
       </div>
 
+      {/* Google Sign-In Button */}
       <button
         type="button"
         onClick={onGoogleSignIn}
         disabled={isLoading}
-        className="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full inline-flex justify-center items-center py-2 px-4 border border-upwork-gray-lighter rounded-md shadow-sm bg-white text-sm font-medium text-upwork-gray hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
           <path

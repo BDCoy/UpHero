@@ -11,13 +11,13 @@ export function SignInPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    rememberMe: false
+    rememberMe: false,
   });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       setIsLoading(true);
 
@@ -48,7 +48,9 @@ export function SignInPage() {
       }
     } catch (error) {
       console.error('Sign in error:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to sign in');
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to sign in'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -58,22 +60,36 @@ export function SignInPage() {
     <AuthLayout>
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md">
-          <div className="text-center">
+          {/* Header Section */}
+          <div
+            className="text-center animate-fade-down animate-once animate-duration-500"
+            style={{ animationDelay: '100ms' }}
+          >
             <h2 className="text-3xl font-extrabold text-upwork-gray">
               Welcome back
             </h2>
             <p className="mt-2 text-sm text-upwork-gray-light">
               Don't have an account?{' '}
-              <Link to="/signup" className="font-medium text-upwork-green hover:text-upwork-green-dark">
+              <Link
+                to="/signup"
+                className="font-medium text-upwork-green hover:text-upwork-green-dark"
+              >
                 Sign up
               </Link>
             </p>
           </div>
 
-          <div className="mt-8 bg-white py-8 px-4 shadow-xl rounded-2xl sm:px-10">
+          {/* Form Container */}
+          <div
+            className="mt-8 bg-white py-8 px-4 shadow-xl rounded-2xl sm:px-10 animate-fade-down animate-once animate-duration-500"
+            style={{ animationDelay: '200ms' }}
+          >
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-upwork-gray">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-upwork-gray"
+                >
                   Email address
                 </label>
                 <div className="mt-1">
@@ -85,13 +101,18 @@ export function SignInPage() {
                     required
                     className="appearance-none block w-full px-3 py-2 border border-upwork-gray-lighter rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-upwork-gray">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-upwork-gray"
+                >
                   Password
                 </label>
                 <div className="mt-1">
@@ -103,7 +124,9 @@ export function SignInPage() {
                     required
                     className="appearance-none block w-full px-3 py-2 border border-upwork-gray-lighter rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green"
                     value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -116,15 +139,26 @@ export function SignInPage() {
                     type="checkbox"
                     className="h-4 w-4 text-upwork-green focus:ring-upwork-green border-upwork-gray-lighter rounded"
                     checked={formData.rememberMe}
-                    onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        rememberMe: e.target.checked,
+                      })
+                    }
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-upwork-gray">
+                  <label
+                    htmlFor="remember-me"
+                    className="ml-2 block text-sm text-upwork-gray"
+                  >
                     Remember me
                   </label>
                 </div>
 
                 <div className="text-sm">
-                  <Link to="/forgot-password" className="font-medium text-upwork-green hover:text-upwork-green-dark">
+                  <Link
+                    to="/forgot-password"
+                    className="font-medium text-upwork-green hover:text-upwork-green-dark"
+                  >
                     Forgot your password?
                   </Link>
                 </div>
@@ -144,7 +178,11 @@ export function SignInPage() {
               </div>
             </form>
 
-            <div className="mt-6">
+            {/* Divider and Social Sign In */}
+            <div
+              className="mt-6 animate-fade-down animate-once animate-duration-500"
+              style={{ animationDelay: '300ms' }}
+            >
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-upwork-gray-lighter" />

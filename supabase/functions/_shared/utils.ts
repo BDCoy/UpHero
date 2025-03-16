@@ -1,4 +1,4 @@
-const calculateEndDate = (plan: string): string => {
+export const calculateEndDate = (plan: string): string => {
   const today = new Date();
   let endDate: Date | null;
 
@@ -22,5 +22,3 @@ const calculateEndDate = (plan: string): string => {
 
   return endDate.toISOString();
 };
-
-export default calculateEndDate;

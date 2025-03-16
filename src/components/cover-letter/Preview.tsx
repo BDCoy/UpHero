@@ -1,4 +1,3 @@
-import React from 'react';
 import { Upload } from 'lucide-react';
 import type { PreviewProps } from './types';
 import { DownloadButton } from './DownloadButton';

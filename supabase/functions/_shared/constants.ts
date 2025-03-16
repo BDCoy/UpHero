@@ -28,6 +28,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
       "Priority support",
       "Custom training",
     ],
+    popular: true,
   },
   {
     id: "pro_3months",

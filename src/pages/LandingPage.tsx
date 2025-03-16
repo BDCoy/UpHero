@@ -4,6 +4,7 @@ import { Logo } from '../components/Logo';
 import { useAuth } from '../lib/AuthProvider';
 import { ArrowRight, CheckCircle, FileSearch, FileSpreadsheet, BookOpen, Target, BrainCircuit, Award, Star, Users, Rocket, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SUBSCRIPTION_PLANS } from '@/lib/revolut';
 
 const features = [
   {
@@ -30,8 +31,8 @@ const features = [
   },
   {
     icon: FileSpreadsheet,
-    title: 'CV & Cover Letter Builder',
-    description: 'Create professional, Upwork-optimized resumes and cover letters that highlight your expertise and increase your hiring potential.',
+    title: 'Cover Letter Builder',
+    description: 'Create professional, Upwork-optimized cover letters that highlight your expertise and increase your hiring potential.',
     benefits: [
       'ATS-friendly templates',
       'Skill-based customization',
@@ -59,49 +60,6 @@ const stats = [
   { number: '85%', label: 'Client Satisfaction' }
 ];
 
-const pricingPlans = [
-  {
-    name: 'Free Trial',
-    price: '$0',
-    period: '/3 days',
-    description: 'Try our essential features',
-    features: [
-      '1 profile optimization',
-      '5 AI proposal generations',
-      'Basic CV templates',
-      'Community support'
-    ]
-  },
-  {
-    name: '1 Month',
-    price: '$29',
-    period: '/month',
-    description: 'Full access, monthly flexibility',
-    features: [
-      'Unlimited profile optimizations',
-      'Unlimited AI proposals',
-      'Premium CV & cover letter templates',
-      'Priority support',
-      'Custom training modules',
-      'Success tracking dashboard'
-    ],
-    popular: true
-  },
-  {
-    name: '3 Months',
-    price: '$69',
-    period: '/3 months',
-    description: 'Save 20% with quarterly billing',
-    features: [
-      'Everything in Monthly plan',
-      'Priority feature access',
-      'Advanced analytics',
-      'Dedicated success manager',
-      'Custom API access',
-      'White-label reports'
-    ]
-  }
-];
 
 export function LandingPage() {
   return (
@@ -213,7 +171,7 @@ export function LandingPage() {
           </div>
 
           <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
-            {pricingPlans.map((plan) => (
+            {SUBSCRIPTION_PLANS.map((plan) => (
               <div
                 key={plan.name}
                 className={`relative rounded-2xl ${
@@ -237,10 +195,10 @@ export function LandingPage() {
                     {plan.popular && <Star className="h-6 w-6 text-yellow-300" />}
                   </div>
                   <p className={`mt-4 text-sm ${plan.popular ? 'text-white/90' : 'text-upwork-gray-light'}`}>
-                    {plan.description}
+                    {plan?.description}
                   </p>
                   <div className="mt-6 flex items-baseline">
-                    <span className="text-4xl font-extrabold">{plan.price}</span>
+                    <span className="text-4xl font-extrabold">{plan.price}$</span>
                     <span className={`ml-1 text-lg ${plan.popular ? 'text-white/90' : 'text-upwork-gray-light'}`}>
                       {plan.period}
                     </span>
@@ -328,7 +286,7 @@ export function LandingPage() {
                 <div>
                   <h3 className="text-2xl font-bold text-upwork-gray mb-4">Our Story</h3>
                   <p className="text-upwork-gray-light leading-relaxed">
-                    Founded in 2024, UpHero emerged from a simple observation: talented freelancers often struggle to stand out in an increasingly competitive market. Our team of former successful freelancers and AI experts came together to create a platform that leverages artificial intelligence to help freelancers optimize their profiles, craft winning proposals, and build successful careers.
+                    Founded in 2025, UpHero emerged from a simple observation: talented freelancers often struggle to stand out in an increasingly competitive market. Our team of former successful freelancers and AI experts came together to create a platform that leverages artificial intelligence to help freelancers optimize their profiles, craft winning proposals, and build successful careers.
                   </p>
                 </div>
                 <div>

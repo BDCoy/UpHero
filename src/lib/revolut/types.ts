@@ -8,7 +8,7 @@ export interface RevolutOrder {
     | "authorised"
     | "completed"
     | "cancelled"
-    | "failed"; 
+    | "failed";
   created_at: string;
   updated_at: string;
   amount: number;
@@ -41,6 +41,12 @@ export interface RevolutSubscription {
   checkout_url: string;
   created_at: string;
   updated_at: string;
+  metadata: {
+    endDate?: string;
+    user_id?: string;
+    email?: string;
+    selectedPlan: string;
+  };
 }
 
 export interface SubscriptionPlan {
@@ -49,6 +55,7 @@ export interface SubscriptionPlan {
   price: number;
   period: string;
   features: string[];
+  popular?: boolean;
 }
 
 export type PLAN_IDS = "free" | "pro" | "pro_3months";
