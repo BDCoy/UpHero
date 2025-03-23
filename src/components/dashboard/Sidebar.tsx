@@ -2,6 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Logo } from "../Logo";
 import { Settings, LogOut, X } from "lucide-react";
 import { sidebarLinks } from "./navigation";
+import { useTourStore } from "@/lib/store/tour";
+import { useEffect } from "react";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -10,6 +12,13 @@ interface SidebarProps {
 
 export function Sidebar({ onClose, onSignOut }: SidebarProps) {
   const location = useLocation();
+  const { startTour, hasCompletedTour } = useTourStore();
+
+  useEffect(() => {
+    if (!hasCompletedTour) {
+      startTour();
+    }
+  }, [hasCompletedTour, startTour]);
 
   return (
     <div className="flex flex-col h-full bg-white shadow-sm">
@@ -31,10 +40,13 @@ export function Sidebar({ onClose, onSignOut }: SidebarProps) {
             {sidebarLinks.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
+              const linkId = `${item.name.toLowerCase().replace(/\s+/g, '-')}-link`;
+              
               return (
                 <Link
                   key={item.name}
                   to={item.path}
+                  id={linkId}
                   onClick={onClose}
                   className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                     isActive

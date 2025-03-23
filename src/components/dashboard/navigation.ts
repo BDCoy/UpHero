@@ -4,6 +4,7 @@ import {
   FileText,
   CheckSquare,
   MessageSquare,
+  BookOpen,
 } from "lucide-react";
 
 export const sidebarLinks = [
@@ -31,5 +32,10 @@ export const sidebarLinks = [
     name: "Proposal Generator",
     path: "/dashboard/proposal-generator",
     icon: MessageSquare,
+  },
+  {
+    name: "Personalized Training",
+    path: "/dashboard/personalized-training",
+    icon: BookOpen,
   },
 ] as const;

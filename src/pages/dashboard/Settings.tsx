@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { ProfileForm } from "@components/settings/ProfileForm";
 import { SubscriptionSection } from "@components/settings/SubscriptionSection";
 import { DangerZone } from "@components/settings/DangerZone";
+import { UpdatePassword } from "@components/settings/UpdatePassword";
 import { ConfirmDialog } from "@components/shared/ConfirmDialog";
 import { getCurrentSubscription, RevolutSubscription } from "@/lib/revolut";
 
@@ -272,6 +273,8 @@ export function Settings() {
         onProfileChange={handleProfileChange}
       />
 
+      <UpdatePassword />
+
       <SubscriptionSection
         subscription={subscription}
         loading={isLoadingSubscription}
@@ -301,6 +304,7 @@ export function Settings() {
           value: deleteConfirmation,
           placeholder: "Type your email to confirm",
           expectedValue: user?.email || "",
+          onChange: (value) => setDeleteConfirmation(value),
         }}
       />
       <ConfirmDialog

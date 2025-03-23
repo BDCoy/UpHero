@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@components/Button";
 import { toast } from "@lib/store";
 import { useProfileAnalysisStore } from "@lib/store/profile-analysis";
@@ -37,6 +37,10 @@ export function ProfileAnalysis() {
       return;
     }
 
+    if (!user) {
+      throw Error("Please signin to continue");
+    }
+
     try {
       setIsAnalyzing(true);
 
@@ -47,17 +51,17 @@ export function ProfileAnalysis() {
         fullName
       );
       setAnalysis(result);
+
       toast.success("Profile analysis completed successfully!");
 
       const { data, error: fetchError } = await supabase
         .from("profiles")
         .select("profile_analysis_count")
-        .eq("id", user.id)
+        .eq("id", user?.id)
         .single();
 
       if (fetchError) {
         console.error("Error fetching current count:", fetchError);
-        toast.error("Failed to fetch current analysis count.");
         return;
       }
 
@@ -66,11 +70,10 @@ export function ProfileAnalysis() {
       const { error: updateError } = await supabase
         .from("profiles")
         .update({ profile_analysis_count: newCount })
-        .eq("id", user.id);
+        .eq("id", user?.id);
 
       if (updateError) {
         console.error("Database update error:", updateError);
-        toast.error("Failed to update analysis count.");
       }
     } catch (error) {
       console.error("Analysis error:", error);

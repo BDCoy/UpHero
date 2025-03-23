@@ -5,14 +5,13 @@ import { Sidebar } from "./dashboard/Sidebar";
 import { Navbar } from "./dashboard/Navbar";
 import { Loader2 } from "lucide-react";
 import { checkUserStatus } from "@/lib/auth/authUtils";
+import { TourModal } from "./tour/TourModal";
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { signOut } = useAuth();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  console.log(loading);
 
   const handleSignOut = async () => {
     await signOut();
@@ -71,6 +70,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
+
+      {/* Tour Modal */}
+      <TourModal />
     </div>
   );
 }

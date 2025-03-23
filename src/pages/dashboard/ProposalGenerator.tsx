@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { Button } from '@components/Button';
-import { RefreshCw } from 'lucide-react';
-import { toast } from '@lib/store';
-import { useProposalStore } from '@lib/store/proposal';
-import { generateProposal } from '@lib/openai/proposal';
-import { ProposalForm } from '@components/proposal/ProposalForm';
-import { ProposalPreview } from '@components/proposal/ProposalPreview';
+import { useState } from "react";
+import { Button } from "@components/Button";
+import { RefreshCw } from "lucide-react";
+import { toast } from "@lib/store";
+import { useProposalStore } from "@lib/store/proposal";
+import { generateProposal } from "@lib/openai/proposal";
+import { ProposalForm } from "@components/proposal/ProposalForm";
+import { ProposalPreview } from "@components/proposal/ProposalPreview";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/lib/AuthProvider";
 
 export function ProposalGenerator() {
+  const { user } = useAuth();
   const [isGenerating, setIsGenerating] = useState(false);
   const {
     fullName,
@@ -24,20 +27,20 @@ export function ProposalGenerator() {
     removeQuestion,
     updateQuestion,
     setGeneratedProposal,
-    reset
+    reset,
   } = useProposalStore();
 
   const handleGenerate = async () => {
     if (!fullName.trim()) {
-      toast.error('Please enter your full name');
+      toast.error("Please enter your full name");
       return;
     }
     if (!profileDescription.trim()) {
-      toast.error('Please provide your profile description');
+      toast.error("Please provide your profile description");
       return;
     }
     if (!jobDescription.trim()) {
-      toast.error('Please provide the job description');
+      toast.error("Please provide the job description");
       return;
     }
 
@@ -47,21 +50,43 @@ export function ProposalGenerator() {
         fullName,
         profileDescription,
         jobDescription,
-        clientQuestions.map(q => q.text),
+        clientQuestions.map((q) => q.text),
         tone
       );
       setGeneratedProposal(result);
-      toast.success('Proposal generated successfully!');
+      toast.success("Proposal generated successfully!");
+
+      const { data, error: fetchError } = await supabase
+        .from("profiles")
+        .select("proposal_generator_count")
+        .eq("id", user?.id)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching current count:", fetchError);
+        return;
+      }
+
+      const newCount = (data?.proposal_generator_count || 0) + 1;
+
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ proposal_generator_count: newCount })
+        .eq("id", user?.id);
+
+      if (updateError) {
+        console.error("Database update error:", updateError);
+      }
     } catch (error) {
-      console.error('Error generating proposal:', error);
-      toast.error('Failed to generate proposal. Please try again.');
+      console.error("Error generating proposal:", error);
+      toast.error("Failed to generate proposal. Please try again.");
     } finally {
       setIsGenerating(false);
     }
   };
 
   const handleAddQuestion = () => {
-    addQuestion('');
+    addQuestion("");
   };
 
   return (
@@ -69,14 +94,16 @@ export function ProposalGenerator() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-upwork-gray">Proposal Generator</h1>
+          <h1 className="text-2xl font-bold text-upwork-gray">
+            Proposal Generator
+          </h1>
           <p className="mt-1 text-sm text-upwork-gray-light">
             Generate winning proposals tailored to specific job requirements
           </p>
         </div>
         {generatedProposal && (
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={reset}
             className="flex items-center gap-2"
           >
@@ -117,7 +144,9 @@ export function ProposalGenerator() {
           ) : (
             <div className="bg-white rounded-lg shadow-sm p-6 h-full flex items-center justify-center">
               <div className="text-center text-upwork-gray-light">
-                <p className="text-lg mb-2">Your generated proposal will appear here</p>
+                <p className="text-lg mb-2">
+                  Your generated proposal will appear here
+                </p>
                 <p className="text-sm">
                   Fill in the form and click "Generate Proposal" to get started
                 </p>
