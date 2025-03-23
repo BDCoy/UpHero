@@ -1,18 +1,17 @@
-import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
-import type { PDFProps } from './types';
+import { Document, Page, Text, View, StyleSheet, Font } from "@react-pdf/renderer";
+import type { PDFProps } from "./types";
 
-// Register a web-safe font that doesn't require downloading
+// Register web-safe fonts for PDF
 Font.register({
-  family: 'Helvetica',
+  family: "Helvetica",
   fonts: [
     {
-      src: 'https://fonts.cdnfonts.com/s/29107/Helvetica.woff',
-      fontWeight: 'normal',
+      src: "https://fonts.cdnfonts.com/s/29107/Helvetica.woff",
+      fontWeight: "normal",
     },
     {
-      src: 'https://fonts.cdnfonts.com/s/29107/Helvetica-Bold.woff',
-      fontWeight: 'bold',
+      src: "https://fonts.cdnfonts.com/s/29107/Helvetica-Bold.woff",
+      fontWeight: "bold",
     },
   ],
 });
@@ -20,31 +19,34 @@ Font.register({
 const styles = StyleSheet.create({
   page: {
     padding: 50,
-    fontFamily: 'Helvetica',
+    fontFamily: "Helvetica",
     fontSize: 12,
     lineHeight: 1.5,
-    color: '#001e00',
+    color: "#001e00", // Default text color
   },
   header: {
-    marginBottom: 40,
+    marginBottom: 32,
+    paddingBottom: 32,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f7faf7", // Border color for bottom
   },
   name: {
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 4,
-    fontWeight: 'bold',
+    fontWeight: "bold", // Equivalent to Tailwind's font-bold
   },
   title: {
-    fontSize: 14,
-    marginBottom: 12,
-    color: '#5e6d55',
+    fontSize: 12,
+    marginTop: 4,
+    color: "#5e6d55", // Tailwind `text-upwork-gray-light`
   },
   contactInfo: {
     fontSize: 12,
-    color: '#5e6d55',
+    color: "#5e6d55", // Tailwind `text-upwork-gray-light`
     marginBottom: 4,
   },
   recipient: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
   recipientText: {
     marginBottom: 4,
@@ -54,16 +56,21 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     marginBottom: 15,
-    textAlign: 'justify',
+    textAlign: "justify", // Justify text like in the Tailwind example
+    color: "#001e00", // Tailwind `text-upwork-gray`
   },
   closing: {
     marginTop: 30,
+    paddingTop: 30,
+    borderTopWidth: 1,
+    borderTopColor: "#f7faf7", // Border top color
   },
   closingText: {
     marginBottom: 4,
+    color: "#001e00", // Tailwind `text-upwork-gray`
   },
   signature: {
-    fontWeight: 'bold',
+    fontWeight: "bold", // Equivalent to Tailwind's font-bold
   },
 });
 
@@ -76,28 +83,41 @@ export function CoverLetterPDF({ coverLetter }: PDFProps) {
           <Text style={styles.name}>{coverLetter.header.name}</Text>
           <Text style={styles.title}>{coverLetter.header.title}</Text>
           {coverLetter.header.contact.address && (
-            <Text style={styles.contactInfo}>{coverLetter.header.contact.address}</Text>
+            <Text style={styles.contactInfo}>
+              {coverLetter.header.contact.address}
+            </Text>
           )}
           {coverLetter.header.contact.cityStateZip && (
-            <Text style={styles.contactInfo}>{coverLetter.header.contact.cityStateZip}</Text>
+            <Text style={styles.contactInfo}>
+              {coverLetter.header.contact.cityStateZip}
+            </Text>
           )}
           {coverLetter.header.contact.phone && (
-            <Text style={styles.contactInfo}>{coverLetter.header.contact.phone}</Text>
+            <Text style={styles.contactInfo}>
+              {coverLetter.header.contact.phone}
+            </Text>
           )}
           {coverLetter.header.contact.email && (
-            <Text style={styles.contactInfo}>{coverLetter.header.contact.email}</Text>
+            <Text style={styles.contactInfo}>
+              {coverLetter.header.contact.email}
+            </Text>
           )}
         </View>
 
         {/* Recipient Section */}
         <View style={styles.recipient}>
-          <Text style={styles.recipientText}>{coverLetter.content.recipient.name}</Text>
-          <Text style={styles.recipientText}>{coverLetter.content.recipient.company}</Text>
+          <Text style={styles.recipientText}>
+            {coverLetter.content.recipient.name}
+          </Text>
+          <Text style={styles.recipientText}>
+            {coverLetter.content.recipient.company}
+          </Text>
         </View>
 
-        {/* Content Section */}
+        {/* Greeting */}
         <Text style={styles.greeting}>{coverLetter.content.greeting}</Text>
 
+        {/* Paragraphs */}
         {coverLetter.content.paragraphs.map((paragraph, index) => (
           <Text key={index} style={styles.paragraph}>
             {paragraph}
@@ -106,8 +126,12 @@ export function CoverLetterPDF({ coverLetter }: PDFProps) {
 
         {/* Closing Section */}
         <View style={styles.closing}>
-          <Text style={styles.closingText}>{coverLetter.content.closing.salutation},</Text>
-          <Text style={styles.signature}>{coverLetter.content.closing.name}</Text>
+          <Text style={styles.closingText}>
+            {coverLetter.content.closing.salutation},
+          </Text>
+          <Text style={styles.signature}>
+            {coverLetter.content.closing.name}
+          </Text>
         </View>
       </Page>
     </Document>

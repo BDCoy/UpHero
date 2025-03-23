@@ -1,4 +1,4 @@
-import { openai } from './config';
+import { openai } from "./config";
 
 export async function generateATSRecommendations(
   cvContent: string,

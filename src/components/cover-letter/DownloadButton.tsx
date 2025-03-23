@@ -11,7 +11,7 @@ export function DownloadButton({ generatedLetter }: DownloadButtonProps) {
       document={<CoverLetterPDF coverLetter={generatedLetter} />}
       fileName={`cover-letter-${new Date().toISOString().split('T')[0]}.pdf`}
     >
-      {({ loading, error }) => (
+      {({ loading }) => (
         <Button 
           variant="outline" 
           disabled={loading} 

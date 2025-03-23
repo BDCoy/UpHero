@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { createCoverLetter } from "@lib/openai";
 import { toast } from "@lib/store";
 import { useCoverLetterStore } from "@lib/store/cover-letter";
 import { CVUploader } from "@components/cover-letter/CVUploader";
@@ -9,6 +8,7 @@ import { Preview } from "@components/cover-letter/Preview";
 import type { FormData } from "@components/cover-letter/types";
 import { useAuth } from "@/lib/AuthProvider";
 import { supabase } from "@/lib/supabase";
+import { createCoverLetter } from "@/lib/openai/cover-letter";
 
 export function CoverLetter() {
   const {

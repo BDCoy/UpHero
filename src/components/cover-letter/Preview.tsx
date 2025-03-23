@@ -29,7 +29,7 @@ export function Preview({ generatedLetter }: PreviewProps) {
             )}
           </div>
 
-          <div className="mb-6">
+          <div className="mb-6 ">
             <p className="font-medium text-upwork-gray">
               {generatedLetter.content.recipient.name}
               <br />
@@ -40,7 +40,7 @@ export function Preview({ generatedLetter }: PreviewProps) {
           <p className="mb-6 text-upwork-gray">{generatedLetter.content.greeting}</p>
 
           {generatedLetter.content.paragraphs.map((paragraph: string, index: number) => (
-            <p key={index} className="mb-6 text-upwork-gray leading-relaxed">
+            <p key={index} className="mb-6 text-upwork-gray leading-relaxed text-justify">
               {paragraph}
             </p>
           ))}

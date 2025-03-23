@@ -1,8 +1,7 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { toast } from "@lib/store";
 import { Button } from "@components/Button";
 import { CVUploader } from "@components/cover-letter/CVUploader";
-import { generateATSRecommendations } from "@lib/openai";
 import { JobDescriptionForm } from "@components/ats-optimizer/JobDescriptionForm";
 import { ActionButtons } from "@components/ats-optimizer/ActionButtons";
 import { AnalysisResult } from "@components/ats-optimizer/AnalysisResult";
@@ -10,6 +9,7 @@ import { useATSOptimizerStore } from "@lib/store/ats-optimizer";
 import { RefreshCw } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthProvider";
+import { generateATSRecommendations } from "@/lib/openai/ats-optimizer";
 
 export function ATSOptimizer() {
   const { user } = useAuth();

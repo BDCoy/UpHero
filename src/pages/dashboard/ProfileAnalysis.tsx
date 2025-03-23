@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button } from "@components/Button";
 import { toast } from "@lib/store";
 import { useProfileAnalysisStore } from "@lib/store/profile-analysis";
-import { analyzeUpworkProfile } from "@lib/openai";
 import { RefreshCw } from "lucide-react";
 import { ProfileForm } from "@components/profile-analysis/ProfileForm";
 import { EmptyState } from "@components/profile-analysis/EmptyState";
@@ -11,6 +10,7 @@ import { Recommendations } from "@components/profile-analysis/Recommendations";
 import { KeywordsList } from "@components/profile-analysis/KeywordsList";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthProvider";
+import { analyzeUpworkProfile } from "@/lib/openai/profile-analysis";
 
 export function ProfileAnalysis() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
