@@ -5,6 +5,7 @@ import { toast } from "../../lib/store";
 import {
   getCurrentSubscription,
   PLAN_IDS,
+  RevolutSubscription,
   SUBSCRIPTION_PLANS,
 } from "@/lib/revolut";
 import { useEffect, useState } from "react";
@@ -15,6 +16,9 @@ import { useAuth } from "@/lib/AuthProvider";
 export function SubscriptionChange() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [currentSubscription, setCurrentSubscription] = useState<
+    RevolutSubscription | undefined
+  >();
   const [currentPlanId, setCurrentPlanId] = useState<PLAN_IDS | null>(null);
   const [selectedPlanId, setSelectedPlanId] = useState<PLAN_IDS | null>(null);
   const [isLoadingSubscription, setIsLoadingSubscription] = useState(false);
@@ -23,11 +27,11 @@ export function SubscriptionChange() {
   const fetchSubscription = async () => {
     setIsLoadingSubscription(true);
     const data = await getCurrentSubscription(user.id);
-
     if (!data) {
       toast.info("No subscription found");
     } else {
       if (data.state === "completed") {
+        setCurrentSubscription(data);
         setCurrentPlanId(data.selected_plan);
       }
     }
@@ -162,10 +166,11 @@ export function SubscriptionChange() {
         </div>
       ) : (
         <div className="py-10">
-          <div className="sm:max-w-3xl m-auto">
+          <div className="sm:max-w-xl m-auto">
             <RevolutCheckoutProvider
               selectedPlan={selectedPlanId || "free"}
               handlePaymentSuccess={handlePaymentSuccess}
+              currentSubscription={currentSubscription}
             >
               <CheckoutSummary
                 selectedPlan={selectedPlan}

@@ -3,8 +3,11 @@ import { MessageForm } from "@components/client-message/MessageForm";
 import { ResponsePreview } from "@components/client-message/ResponsePreview";
 import { toast } from "@lib/store";
 import { generateClientMessage } from "@/lib/openai/client-messages";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/lib/AuthProvider";
 
 export function ClientMessageResponse() {
+  const { user } = useAuth();
   const [clientMessage, setClientMessage] = useState("");
   const [generatedResponse, setGeneratedResponse] = useState<string | null>(
     null
@@ -21,7 +24,30 @@ export function ClientMessageResponse() {
       setIsGenerating(true);
       const response = await generateClientMessage(clientMessage);
       setGeneratedResponse(response);
+
       toast.success("Response generated successfully!");
+
+      const { data, error: fetchError } = await supabase
+        .from("profiles")
+        .select("client_messages_count")
+        .eq("id", user?.id)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching current count:", fetchError);
+        return;
+      }
+
+      const newCount = (data?.client_messages_count || 0) + 1;
+
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ client_messages_count: newCount })
+        .eq("id", user?.id);
+
+      if (updateError) {
+        console.error("Database update error:", updateError);
+      }
     } catch (error) {
       console.error("Error generating response:", error);
       toast.error("Failed to generate response. Please try again.");
