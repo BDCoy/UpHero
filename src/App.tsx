@@ -21,7 +21,8 @@ import { ProfileAnalysis } from '@pages/dashboard/ProfileAnalysis';
 import { CoverLetter } from '@pages/dashboard/CoverLetter';
 import { ATSOptimizer } from '@pages/dashboard/ATSOptimizer';
 import { ProposalGenerator } from '@pages/dashboard/ProposalGenerator';
-import { PersonalizedTraining } from './pages/dashboard/PersonalizedTraining';
+import { ClientMessageResponse } from '@pages/dashboard/ClientMessageResponse';
+import { PersonalizedTraining } from '@pages/dashboard/PersonalizedTraining';
 import { Settings } from '@pages/dashboard/Settings';
 import { SubscriptionChange } from '@pages/dashboard/SubscriptionChange';
 
@@ -50,6 +51,7 @@ function App() {
           <Route path="/dashboard/cover-letter" element={<ProtectedDashboardRoute><CoverLetter /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/ats-optimizer" element={<ProtectedDashboardRoute><ATSOptimizer /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/proposal-generator" element={<ProtectedDashboardRoute><ProposalGenerator /></ProtectedDashboardRoute>} />
+          <Route path="/dashboard/client-messages" element={<ProtectedDashboardRoute><ClientMessageResponse /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/personalized-training" element={<ProtectedDashboardRoute><PersonalizedTraining /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/settings" element={<ProtectedDashboardRoute><Settings /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/settings/subscription/change" element={<ProtectedDashboardRoute><SubscriptionChange /></ProtectedDashboardRoute>} />

@@ -5,6 +5,7 @@ import {
   CheckSquare,
   MessageSquare,
   BookOpen,
+  MessageCircle,
 } from "lucide-react";
 
 export const sidebarLinks = [
@@ -32,6 +33,11 @@ export const sidebarLinks = [
     name: "Proposal Generator",
     path: "/dashboard/proposal-generator",
     icon: MessageSquare,
+  },
+  {
+    name: "Client Messages",
+    path: "/dashboard/client-messages",
+    icon: MessageCircle,
   },
   {
     name: "Personalized Training",
