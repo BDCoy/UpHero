@@ -123,7 +123,7 @@ serve(async (req) => {
 
       if (newState === "completed") {
         const userId = subscriptionData.user_id;
-
+        // Step 3: Update profile usage counters when the state is 'completed'
         const { error: profileUpdateError } = await supabase
           .from("profiles")
           .update({
@@ -142,6 +142,28 @@ serve(async (req) => {
           );
           return new Response(
             JSON.stringify({ error: profileUpdateError.message }),
+            {
+              status: 500,
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        }
+
+        // Step 4: Update all subscriptions that have state 'completed' and different order_id to 'cancelled'
+        const { error: cancelSubscriptionsError } = await supabase
+          .from("subscriptions")
+          .update({ state: "cancelled" })
+          .eq("user_id", userId) // Ensure user_id is the same as user id
+          .eq("state", "completed")
+          .neq("revolut_order_id", orderId); // Ensure the order_id is different
+
+        if (cancelSubscriptionsError) {
+          console.error(
+            "Error cancelling other subscriptions:",
+            cancelSubscriptionsError
+          );
+          return new Response(
+            JSON.stringify({ error: cancelSubscriptionsError.message }),
             {
               status: 500,
               headers: { "Content-Type": "application/json" },

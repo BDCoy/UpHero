@@ -27,33 +27,54 @@ export function SubscriptionSection({
   }
 
   let isExpired = false;
+  let nextBillingDate: string | null = null;
+
   if (subscription?.metadata?.endDate) {
     const endDate = new Date(subscription.metadata.endDate);
     const currentDate = new Date();
     isExpired = endDate.getTime() < currentDate.getTime();
+
+    nextBillingDate = endDate.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   }
 
   return (
     <div className="p-6 bg-white shadow rounded-lg mt-6">
-      <h3 className="text-lg font-medium text-upwork-gray">
+      <h3 className="text-lg font-semibold text-upwork-gray">
         Subscription Management
       </h3>
+
       {selectedPlan && subscription ? (
-        <div className="mt-4">
-          <div className="rounded-lg border border-upwork-gray-lighter bg-white p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="mt-6">
+          <div className="bg-white rounded-lg border border-upwork-gray-lighter p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
               <div>
                 <p className="text-sm font-medium text-upwork-gray">
-                  Current Plan: {selectedPlan.name}
+                  Current Plan:{" "}
+                  <span className="font-semibold">{selectedPlan.name}</span>
                 </p>
                 <p className="text-sm text-upwork-gray-light">
-                  Price: ${selectedPlan.price} {subscription.currency}{" "}
-                  {selectedPlan.period}
+                  Price:{" "}
+                  <span className="font-semibold">${selectedPlan.price}</span>{" "}
+                  {subscription.currency} {selectedPlan.period}
                 </p>
+
+                {/* Next Billing Date */}
+                {nextBillingDate && !isExpired && (
+                  <p className="text-sm text-upwork-gray-light mt-2">
+                    <span className="font-semibold">Next Billing Date:</span>{" "}
+                    {nextBillingDate}
+                  </p>
+                )}
+
                 {/* Subscription State Badge */}
-                <div className="mt-2">
+                <div className="mt-4">
                   <span
-                    className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${
+                    className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${
                       subscription.state === "cancelled"
                         ? "bg-red-100 text-red-800"
                         : subscription.state === "completed"
@@ -65,7 +86,9 @@ export function SubscriptionSection({
                   </span>
                 </div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3">
+
+              <div className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-0">
+                {/* Cancel/Reactivate Buttons */}
                 {subscription.state !== "cancelled" && !isExpired && (
                   <Button
                     variant="outline"
@@ -81,12 +104,14 @@ export function SubscriptionSection({
                     className="text-green-600 border-green-200 hover:bg-green-50"
                     onClick={() => onReactivateSubscription(subscription.id)}
                   >
-                    Reactivate Subscription
+                    Reactivate
                   </Button>
                 )}
-                <Link to="/dashboard/settings/subscription/change">
+
+                {/* Change Plan Button */}
+                <Link to="/dashboard/settings/subscription/upgrade">
                   <Button variant="outline" className="w-full sm:w-auto">
-                    {isExpired ? "Choose a Plan" : "Change Plan"}
+                    {isExpired ? "Choose a Plan" : "Upgrade Plan"}
                   </Button>
                 </Link>
               </div>
@@ -94,11 +119,11 @@ export function SubscriptionSection({
           </div>
         </div>
       ) : (
-        <div className="mt-4 flex justify-between items-center gap-4">
+        <div className="mt-6 flex justify-between items-center gap-4">
           <p className="text-sm text-upwork-gray-light">
             No active subscription found.
           </p>
-          <Link to="/dashboard/settings/subscription/change">
+          <Link to="/dashboard/settings/subscription/upgrade">
             <Button variant="outline" className="w-full sm:w-auto">
               Choose a Plan
             </Button>

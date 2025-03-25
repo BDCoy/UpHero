@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef, useState } from "react";
 import { toast } from "@lib/store";
 import { useCoverLetterStore } from "@lib/store/cover-letter";
 import { CVUploader } from "@components/cover-letter/CVUploader";
@@ -9,6 +9,9 @@ import type { FormData } from "@components/cover-letter/types";
 import { useAuth } from "@/lib/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { createCoverLetter } from "@/lib/openai/cover-letter";
+import { SubscriptionModal } from "@/components/shared/SubscriptionModal";
+import { useNavigate } from "react-router-dom";
+import { checkSubscriptionStatus } from "@/lib/auth/authUtils";
 
 export function CoverLetter() {
   const {
@@ -20,8 +23,10 @@ export function CoverLetter() {
     setGeneratedLetter,
     reset,
   } = useCoverLetterStore();
-  const [isGenerating, setIsGenerating] = React.useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (text: string) => {
@@ -43,6 +48,12 @@ export function CoverLetter() {
       return;
     }
 
+    // Check subscription status
+    const isSubscriptionValid = await checkSubscriptionStatus(navigate);
+    if (!isSubscriptionValid) {
+      setShowSubscriptionModal(true);
+      return;
+    }
     try {
       setIsGenerating(true);
       const letter = await createCoverLetter(
@@ -122,6 +133,11 @@ export function CoverLetter() {
 
         <Preview generatedLetter={generatedLetter} />
       </div>
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        isOpen={showSubscriptionModal}
+        onClose={() => setShowSubscriptionModal(false)}
+      />
     </div>
   );
 }

@@ -54,7 +54,7 @@ function App() {
           <Route path="/dashboard/client-messages" element={<ProtectedDashboardRoute><ClientMessageResponse /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/personalized-training" element={<ProtectedDashboardRoute><PersonalizedTraining /></ProtectedDashboardRoute>} />
           <Route path="/dashboard/settings" element={<ProtectedDashboardRoute><Settings /></ProtectedDashboardRoute>} />
-          <Route path="/dashboard/settings/subscription/change" element={<ProtectedDashboardRoute><SubscriptionChange /></ProtectedDashboardRoute>} />
+          <Route path="/dashboard/settings/subscription/upgrade" element={<ProtectedDashboardRoute><SubscriptionChange /></ProtectedDashboardRoute>} />
 
           {/* Public pages with Layout */}
           <Route path="/" element={<Layout><LandingPage /></Layout>} />

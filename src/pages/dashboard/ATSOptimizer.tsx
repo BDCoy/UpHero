@@ -10,9 +10,14 @@ import { RefreshCw } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthProvider";
 import { generateATSRecommendations } from "@/lib/openai/ats-optimizer";
+import { checkSubscriptionStatus } from "@/lib/auth/authUtils";
+import { useNavigate } from "react-router-dom";
+import { SubscriptionModal } from "@/components/shared/SubscriptionModal";
 
 export function ATSOptimizer() {
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
   const {
     cvContent,
     jobDescription,
@@ -39,6 +44,13 @@ export function ATSOptimizer() {
       toast.error("Please enter the job description");
       return;
     }
+    // Check subscription status
+    const isSubscriptionValid = await checkSubscriptionStatus(navigate);
+    if (!isSubscriptionValid) {
+      setShowSubscriptionModal(true);
+      return;
+    }
+
     try {
       setIsGenerating(true);
       const analysis = await generateATSRecommendations(
@@ -159,6 +171,11 @@ export function ATSOptimizer() {
           )}
         </div>
       </div>
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        isOpen={showSubscriptionModal}
+        onClose={() => setShowSubscriptionModal(false)}
+      />
     </div>
   );
 }

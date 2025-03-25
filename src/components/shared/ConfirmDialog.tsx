@@ -33,101 +33,102 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   if (!isOpen) return null;
 
-  // Apply variant-specific colors
-  const getVariantStyles = () => {
-    switch (variant) {
-      case "danger":
-        return {
-          button: "border-red-300 bg-red-600 text-white hover:bg-red-700",
-          icon: "bg-red-100 text-red-600",
-        };
-      default:
-        return {
-          button:
-            "border-yellow-300 bg-yellow-600 text-white hover:bg-yellow-700",
-          icon: "bg-yellow-100 text-yellow-600",
-        };
-    }
-  };
+  const variantStyles = {
+    danger: {
+      button: "bg-red-600 text-white hover:bg-red-700",
+      icon: "bg-red-100 text-red-600",
+      focus: "focus:ring-red-500 focus:border-red-500",
+    },
+    warning: {
+      button: "bg-yellow-600 text-white hover:bg-yellow-700",
+      icon: "bg-yellow-100 text-yellow-600",
+      focus: "focus:ring-yellow-500 focus:border-yellow-500",
+    },
+  }[variant];
 
-  const styles = getVariantStyles();
+  const isDisabled =
+    isLoading ||
+    (confirmInput &&
+      confirmInput.value !== confirmInput.expectedValue);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-dialog-title"
+    >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-upwork-gray bg-opacity-75 transition-opacity"
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
         aria-hidden="true"
+        onClick={onCancel}
       />
 
-      {/* Dialog Container */}
-      <div className="relative mx-4 w-full max-w-md sm:mx-auto overflow-hidden rounded-lg bg-white shadow-xl transform transition-all">
-        <div className="p-6 space-y-4">
-          {/* Icon */}
-          <div className="flex justify-center">
-            <div
-              className={`flex h-12 w-12 items-center justify-center rounded-full ${styles.icon}`}
+      {/* Dialog Panel */}
+      <div className="relative z-10 mx-4 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl transition-all sm:mx-auto">
+        {/* Icon */}
+        <div className="flex justify-center mb-4">
+          <div
+            className={`h-12 w-12 flex items-center justify-center rounded-full ${variantStyles.icon}`}
+          >
+            <AlertTriangle className="h-6 w-6" />
+          </div>
+        </div>
+
+        {/* Title & Description */}
+        <div className="text-center space-y-2">
+          <h3
+            id="confirm-dialog-title"
+            className="text-lg font-semibold text-upwork-gray"
+          >
+            {title}
+          </h3>
+          <p className="text-sm text-upwork-gray-light">{description}</p>
+        </div>
+
+        {/* Optional Confirm Input */}
+        {confirmInput && (
+          <div className="mt-4 text-left">
+            <label
+              htmlFor="confirm-input"
+              className="block text-sm font-medium text-upwork-gray"
             >
-              <AlertTriangle className="h-6 w-6" />
-            </div>
-          </div>
-
-          {/* Title & Description */}
-          <div className="text-center space-y-2">
-            <h3 className="text-lg font-medium text-upwork-gray">{title}</h3>
-            <p className="text-sm text-upwork-gray-light">{description}</p>
-
-            {/* Optional Confirm Input */}
-            {confirmInput && (
-              <div className="mt-4 text-left">
-                <label
-                  htmlFor="confirm"
-                  className="block text-sm font-medium text-upwork-gray"
-                >
-                  Please type{" "}
-                  <span className="font-semibold">
-                    {confirmInput.expectedValue}
-                  </span>{" "}
-                  to confirm
-                </label>
-                <input
-                  type="text"
-                  id="confirm"
-                  value={confirmInput.value}
-                  onChange={(e) =>
-                    confirmInput.onChange
-                      ? confirmInput.onChange(e.target.value)
-                      : // Fallback if no onChange prop is passed
-                        (confirmInput.placeholder = e.target.value)
-                  }
-                  className="mt-1 block w-full rounded-md border border-upwork-gray-lighter px-3 py-2 text-upwork-gray placeholder-upwork-gray-light focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col-reverse items-stretch gap-3 sm:flex-row-reverse sm:justify-center sm:gap-3">
-            <Button
-              variant="outline"
-              className={`w-full sm:w-auto ${styles.button}`}
-              onClick={onConfirm}
-              disabled={
-                isLoading ||
-                (confirmInput &&
-                  confirmInput.value !== confirmInput.expectedValue)
+              Please type{" "}
+              <span className="font-semibold">
+                {confirmInput.expectedValue}
+              </span>{" "}
+              to confirm
+            </label>
+            <input
+              id="confirm-input"
+              type="text"
+              placeholder={confirmInput.placeholder}
+              value={confirmInput.value}
+              onChange={(e) =>
+                confirmInput.onChange?.(e.target.value)
               }
-            >
-              {isLoading ? "Processing..." : confirmLabel}
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full sm:w-auto"
-              onClick={onCancel}
-            >
-              {cancelLabel}
-            </Button>
+              className={`mt-1 block w-full rounded-md border px-3 py-2 text-sm text-upwork-gray placeholder-upwork-gray-light border-upwork-gray-lighter focus:outline-none ${variantStyles.focus}`}
+            />
           </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row-reverse sm:justify-center">
+          <Button
+            className={`w-full sm:w-auto ${variantStyles.button}`}
+            onClick={onConfirm}
+            disabled={isDisabled}
+          >
+            {isLoading ? "Processing..." : confirmLabel}
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full sm:w-auto"
+            onClick={onCancel}
+          >
+            {cancelLabel}
+          </Button>
         </div>
       </div>
     </div>

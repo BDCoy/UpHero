@@ -8,9 +8,14 @@ import { ProposalForm } from "@components/proposal/ProposalForm";
 import { ProposalPreview } from "@components/proposal/ProposalPreview";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthProvider";
+import { SubscriptionModal } from "@/components/shared/SubscriptionModal";
+import { checkSubscriptionStatus } from "@/lib/auth/authUtils";
+import { useNavigate } from "react-router-dom";
 
 export function ProposalGenerator() {
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [isGenerating, setIsGenerating] = useState(false);
   const {
     fullName,
@@ -41,6 +46,12 @@ export function ProposalGenerator() {
     }
     if (!jobDescription.trim()) {
       toast.error("Please provide the job description");
+      return;
+    }
+    // Check subscription status
+    const isSubscriptionValid = await checkSubscriptionStatus(navigate);
+    if (!isSubscriptionValid) {
+      setShowSubscriptionModal(true);
       return;
     }
 
@@ -155,6 +166,11 @@ export function ProposalGenerator() {
           )}
         </div>
       </div>
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        isOpen={showSubscriptionModal}
+        onClose={() => setShowSubscriptionModal(false)}
+      />
     </div>
   );
 }

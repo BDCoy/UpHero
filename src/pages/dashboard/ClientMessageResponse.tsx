@@ -5,9 +5,14 @@ import { toast } from "@lib/store";
 import { generateClientMessage } from "@/lib/openai/client-messages";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthProvider";
+import { SubscriptionModal } from "@/components/shared/SubscriptionModal";
+import { useNavigate } from "react-router-dom";
+import { checkSubscriptionStatus } from "@/lib/auth/authUtils";
 
 export function ClientMessageResponse() {
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [clientMessage, setClientMessage] = useState("");
   const [generatedResponse, setGeneratedResponse] = useState<string | null>(
     null
@@ -17,6 +22,13 @@ export function ClientMessageResponse() {
   const handleGenerate = async () => {
     if (!clientMessage.trim()) {
       toast.error("Please enter a client message");
+      return;
+    }
+
+    // Check subscription status
+    const isSubscriptionValid = await checkSubscriptionStatus(navigate);
+    if (!isSubscriptionValid) {
+      setShowSubscriptionModal(true);
       return;
     }
 
@@ -76,6 +88,11 @@ export function ClientMessageResponse() {
         />
         <ResponsePreview response={generatedResponse} />
       </div>
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        isOpen={showSubscriptionModal}
+        onClose={() => setShowSubscriptionModal(false)}
+      />
     </div>
   );
 }

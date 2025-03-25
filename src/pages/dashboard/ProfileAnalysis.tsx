@@ -11,10 +11,15 @@ import { KeywordsList } from "@components/profile-analysis/KeywordsList";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthProvider";
 import { analyzeUpworkProfile } from "@/lib/openai/profile-analysis";
+import { checkSubscriptionStatus } from "@/lib/auth/authUtils";
+import { useNavigate } from "react-router-dom";
+import { SubscriptionModal } from "@/components/shared/SubscriptionModal";
 
 export function ProfileAnalysis() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
   const {
     fullName,
     currentHeadline,
@@ -39,6 +44,13 @@ export function ProfileAnalysis() {
 
     if (!user) {
       throw Error("Please signin to continue");
+    }
+
+    // Check subscription status
+    const isSubscriptionValid = await checkSubscriptionStatus(navigate);
+    if (!isSubscriptionValid) {
+      setShowSubscriptionModal(true);
+      return;
     }
 
     try {
@@ -146,6 +158,12 @@ export function ProfileAnalysis() {
           )}
         </div>
       </div>
+
+      {/* Subscription Modal */}
+      <SubscriptionModal 
+        isOpen={showSubscriptionModal}
+        onClose={() => setShowSubscriptionModal(false)}
+      />
     </div>
   );
 }

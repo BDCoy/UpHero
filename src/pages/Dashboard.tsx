@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/AuthProvider";
 import { supabase } from "../lib/supabase";
-import { TrendingUp, Users, FileText, Star } from "lucide-react";
+import { TrendingUp, Users, FileText, Star, MessageSquare, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/Button";
+import { useTrainingStore } from "@/lib/store/training";
 
 export function Dashboard() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
+  const { moduleProgress } = useTrainingStore();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -27,6 +31,11 @@ export function Dashboard() {
 
     fetchProfile();
   }, [user]);
+
+  // Calculate completed modules percentage
+  const completedModules = moduleProgress.filter(Boolean).length;
+  const totalModules = moduleProgress.length;
+  const completionPercentage = Math.round((completedModules / totalModules) * 100);
 
   const stats = [
     {
@@ -49,6 +58,11 @@ export function Dashboard() {
       value: profile ? profile.proposal_generator_count : 0,
       icon: TrendingUp,
     },
+    {
+      label: "Client Messages",
+      value: profile ? profile.client_messages_count : 0,
+      icon: MessageSquare,
+    },
   ];
 
   if (loadingProfile) {
@@ -56,8 +70,8 @@ export function Dashboard() {
       <div className="space-y-6 p-4">
         <div className="animate-pulse">
           <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-            {Array.from({ length: 4 }).map((_, index) => (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-6">
+            {Array.from({ length: 5 }).map((_, index) => (
               <div key={index} className="h-32 bg-gray-200 rounded-lg"></div>
             ))}
           </div>
@@ -86,7 +100,7 @@ export function Dashboard() {
       </div>
 
       {/* Dashboard Stats */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
@@ -110,6 +124,45 @@ export function Dashboard() {
             </div>
           );
         })}
+      </div>
+
+      {/* Training Progress Section */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-upwork-background rounded-lg">
+              <BookOpen className="h-6 w-6 text-upwork-green" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-upwork-gray">Training Progress</h3>
+              <p className="text-sm text-upwork-gray-light">
+                Complete all modules to master Upwork success
+              </p>
+            </div>
+          </div>
+          <Link to="/dashboard/personalized-training">
+            <Button variant="outline" size="sm">
+              Continue Training
+            </Button>
+          </Link>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-upwork-gray">
+              {completedModules} of {totalModules} modules completed
+            </span>
+            <span className="text-sm font-medium text-upwork-gray">
+              {completionPercentage}%
+            </span>
+          </div>
+          <div className="w-full bg-upwork-background rounded-full h-2.5">
+            <div
+              className="bg-upwork-green h-2.5 rounded-full transition-all duration-300"
+              style={{ width: `${completionPercentage}%` }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
