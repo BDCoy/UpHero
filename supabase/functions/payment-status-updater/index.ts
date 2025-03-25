@@ -81,19 +81,73 @@ serve(async (req) => {
         newState = "failed"; // Default to 'failed' for unhandled events
         break;
     }
-    // Update the subscription status in the database
+    // Step 1: Update the subscription state
     if (newState) {
-      const { error } = await supabase
+      const { error: subscriptionUpdateError } = await supabase
         .from("subscriptions")
         .update({ state: newState })
         .eq("revolut_order_id", orderId);
 
-      if (error) {
-        console.error("Error updating subscription:", error);
-        return new Response(JSON.stringify({ error: error.message }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        });
+      if (subscriptionUpdateError) {
+        console.error("Error updating subscription:", subscriptionUpdateError);
+        return new Response(
+          JSON.stringify({ error: subscriptionUpdateError.message }),
+          {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      // Step 2: Get the subscription info (to get user_id)
+      const { data: subscriptionData, error: subscriptionFetchError } =
+        await supabase
+          .from("subscriptions")
+          .select("user_id")
+          .eq("revolut_order_id", orderId)
+          .single();
+
+      if (subscriptionFetchError) {
+        console.error(
+          "Error fetching subscription user_id:",
+          subscriptionFetchError
+        );
+        return new Response(
+          JSON.stringify({ error: subscriptionFetchError.message }),
+          {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      if (newState === "completed") {
+        const userId = subscriptionData.user_id;
+
+        const { error: profileUpdateError } = await supabase
+          .from("profiles")
+          .update({
+            profile_analysis_count: 0,
+            ats_optimizer_count: 0,
+            proposal_generator_count: 0,
+            cover_letter_count: 0,
+            client_messages_count: 0,
+          })
+          .eq("id", userId);
+
+        if (profileUpdateError) {
+          console.error(
+            "Error updating profile usage counters:",
+            profileUpdateError
+          );
+          return new Response(
+            JSON.stringify({ error: profileUpdateError.message }),
+            {
+              status: 500,
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        }
       }
     }
 
