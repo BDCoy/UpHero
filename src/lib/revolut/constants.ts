@@ -17,6 +17,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
       "5 ATS Scans / Month",
       "3 Cover Letters / Month",
       "15 Client Responses / Month",
+      "Personalized Training",
       "Email Support",
     ],
     popular: false,

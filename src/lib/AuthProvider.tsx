@@ -6,7 +6,6 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   user: User | null;
   loading: boolean;
-  checkAuth: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -14,7 +13,6 @@ const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   user: null,
   loading: true,
-  checkAuth: async () => {},
   signOut: async () => {},
 });
 
@@ -47,14 +45,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => subscription.unsubscribe();
   }, []);
 
-  const checkAuth = async () => {
-    setLoading(true);
-    const { data } = await supabase.auth.getUser();
-    setIsAuthenticated(!!data.user);
-    setUser(data.user);
-    setLoading(false);
-  };
-
   const signOut = async () => {
     await supabase.auth.signOut();
     setIsAuthenticated(false);
@@ -62,9 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, user, loading, checkAuth, signOut }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, user, loading, signOut }}>
       {children}
     </AuthContext.Provider>
   );

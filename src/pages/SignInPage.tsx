@@ -1,60 +1,40 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@components/Button';
-import { AuthLayout } from '@components/AuthLayout';
-import { supabase } from '@lib/supabase';
-import { toast } from '@lib/store';
-import { Loader2 } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@components/Button";
+import { AuthLayout } from "@components/AuthLayout";
+import { supabase } from "@lib/supabase";
+import { toast } from "@lib/store";
+import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Formik, Field, Form } from "formik";
+import * as Yup from "yup";
+import { useAuth } from "@/lib/AuthProvider";
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string().required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 export function SignInPage() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false,
-  });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { isAuthenticated, loading } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      setIsLoading(true);
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      if (data.user) {
-        // Check if signup is completed
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('signup_completed, current_signup_step')
-          .eq('id', data.user.id)
-          .single();
-
-        if (profile?.signup_completed) {
-          toast.success('Successfully signed in!');
-          navigate('/dashboard');
-        } else {
-          // Redirect to the appropriate signup step
-          navigate('/signup');
-        }
-      }
-    } catch (error) {
-      console.error('Sign in error:', error);
-      toast.error(
-        error instanceof Error ? error.message : 'Failed to sign in'
-      );
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
     }
-  };
+  }, [isAuthenticated, navigate]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col items-center">
+          <Loader2 className="h-10 w-10 text-gray-500 animate-spin" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <AuthLayout>
@@ -63,13 +43,13 @@ export function SignInPage() {
           {/* Header Section */}
           <div
             className="text-center animate-fade-down animate-once animate-duration-500"
-            style={{ animationDelay: '100ms' }}
+            style={{ animationDelay: "100ms" }}
           >
             <h2 className="text-3xl font-extrabold text-upwork-gray">
               Welcome back
             </h2>
             <p className="mt-2 text-sm text-upwork-gray-light">
-              Don't have an account?{' '}
+              Don't have an account?{" "}
               <Link
                 to="/signup"
                 className="font-medium text-upwork-green hover:text-upwork-green-dark"
@@ -82,106 +62,145 @@ export function SignInPage() {
           {/* Form Container */}
           <div
             className="mt-8 bg-white py-8 px-4 shadow-xl rounded-2xl sm:px-10 animate-fade-down animate-once animate-duration-500"
-            style={{ animationDelay: '200ms' }}
+            style={{ animationDelay: "200ms" }}
           >
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-upwork-gray"
-                >
-                  Email address
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="appearance-none block w-full px-3 py-2 border border-upwork-gray-lighter rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
+            <Formik
+              initialValues={{ email: "", password: "", rememberMe: false }}
+              validationSchema={validationSchema}
+              onSubmit={async (values) => {
+                setIsLoading(true);
+                try {
+                  const { data, error } =
+                    await supabase.auth.signInWithPassword({
+                      email: values.email,
+                      password: values.password,
+                    });
+                  if (error) throw error;
+
+                  if (data.user) {
+                    const { data: profile } = await supabase
+                      .from("profiles")
+                      .select("signup_completed, current_signup_step")
+                      .eq("id", data.user.id)
+                      .single();
+
+                    if (profile?.signup_completed) {
+                      toast.success("Successfully signed in!");
+                      navigate("/dashboard");
+                    } else {
+                      navigate("/signup");
                     }
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-upwork-gray"
-                >
-                  Password
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    className="appearance-none block w-full px-3 py-2 border border-upwork-gray-lighter rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green"
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-upwork-green focus:ring-upwork-green border-upwork-gray-lighter rounded"
-                    checked={formData.rememberMe}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        rememberMe: e.target.checked,
-                      })
-                    }
-                  />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-2 block text-sm text-upwork-gray"
-                  >
-                    Remember me
-                  </label>
-                </div>
-
-                <div className="text-sm">
-                  <Link
-                    to="/forgot-password"
-                    className="font-medium text-upwork-green hover:text-upwork-green-dark"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-              </div>
-
-              <div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? (
-                    <div className="flex items-center justify-center">
-                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                      Signing in...
+                  }
+                } catch (error) {
+                  console.error("Sign in error:", error);
+                  toast.error(
+                    error instanceof Error ? error.message : "Failed to sign in"
+                  );
+                } finally {
+                  setIsLoading(false);
+                }
+              }}
+            >
+              {() => (
+                <Form className="space-y-6">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-upwork-gray"
+                    >
+                      Email address
+                    </label>
+                    <div className="mt-1">
+                      <Field
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        className="appearance-none block w-full px-3 py-2 border border-upwork-gray-lighter rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green"
+                      />
                     </div>
-                  ) : (
-                    'Sign in'
-                  )}
-                </Button>
-              </div>
-            </form>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-upwork-gray"
+                    >
+                      Password
+                    </label>
+                    <div className="relative mt-1">
+                      <Field
+                        id="password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
+                        required
+                        className="appearance-none block w-full px-3 py-2 border border-upwork-gray-lighter rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-upwork-gray-light hover:text-upwork-gray"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-5 w-5" aria-hidden="true" />
+                        ) : (
+                          <Eye className="h-5 w-5" aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Field
+                        id="rememberMe"
+                        name="rememberMe"
+                        type="checkbox"
+                        className="h-4 w-4 text-upwork-green focus:ring-upwork-green border-upwork-gray-lighter rounded"
+                      />
+                      <label
+                        htmlFor="rememberMe"
+                        className="ml-2 block text-sm text-upwork-gray"
+                      >
+                        Remember me
+                      </label>
+                    </div>
+                    <div className="text-sm">
+                      <Link
+                        to="/forgot-password"
+                        className="font-medium text-upwork-green hover:text-upwork-green-dark"
+                      >
+                        Forgot your password?
+                      </Link>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center justify-center">
+                          <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                          Signing in...
+                        </div>
+                      ) : (
+                        "Sign in"
+                      )}
+                    </Button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
 
             {/* Divider and Social Sign In */}
             <div
               className="mt-6 animate-fade-down animate-once animate-duration-500"
-              style={{ animationDelay: '300ms' }}
+              style={{ animationDelay: "300ms" }}
             >
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

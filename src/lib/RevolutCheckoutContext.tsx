@@ -46,12 +46,10 @@ export const RevolutCheckoutProvider = ({
   children,
   selectedPlan,
   handlePaymentSuccess,
-  currentSubscription,
 }: {
   children: React.ReactNode;
   selectedPlan: PLAN_IDS;
   handlePaymentSuccess: () => void;
-  currentSubscription?: RevolutSubscription | undefined;
 }) => {
   const revolutPublicOrderId = getRevolutPayOrderIdURLParam();
   const [order, setOrder] = useState<RevolutOrder | null>(null);
@@ -244,16 +242,6 @@ export const RevolutCheckoutProvider = ({
   const handlePaymentEvent = async (eventType: string, orderId: string) => {
     switch (eventType) {
       case "success": {
-        if (currentSubscription) {
-          const { error } = await modifySubscriptionStatus(
-            currentSubscription.revolut_order_id,
-            "cancelled"
-          );
-          if (error) {
-            setError("Error: failed to modify subscription status");
-            return;
-          }
-        }
         const { error } = await modifySubscriptionStatus(orderId, "completed");
         if (error) {
           setError("Error: failed to modify subscription status");

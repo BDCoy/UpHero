@@ -28,6 +28,7 @@ export function SubscriptionSection({
 
   let isExpired = false;
   let nextBillingDate: string | null = null;
+  const isCancelled = subscription?.state === "cancelled";
 
   if (subscription?.metadata?.endDate) {
     const endDate = new Date(subscription.metadata.endDate);
@@ -64,7 +65,7 @@ export function SubscriptionSection({
                 </p>
 
                 {/* Next Billing Date */}
-                {nextBillingDate && !isExpired && (
+                {nextBillingDate && !isExpired && !isCancelled && (
                   <p className="text-sm text-upwork-gray-light mt-2">
                     <span className="font-semibold">Next Billing Date:</span>{" "}
                     {nextBillingDate}
@@ -89,7 +90,7 @@ export function SubscriptionSection({
 
               <div className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-0">
                 {/* Cancel/Reactivate Buttons */}
-                {subscription.state !== "cancelled" && !isExpired && (
+                {!isCancelled && !isExpired && (
                   <Button
                     variant="outline"
                     className="text-red-600 border-red-200 hover:bg-red-50"
@@ -98,7 +99,7 @@ export function SubscriptionSection({
                     Cancel Subscription
                   </Button>
                 )}
-                {subscription.state === "cancelled" && !isExpired && (
+                {isCancelled && !isExpired && (
                   <Button
                     variant="outline"
                     className="text-green-600 border-green-200 hover:bg-green-50"

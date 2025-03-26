@@ -225,14 +225,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     About
                   </button>
                 </li>
-                <li>
+                {/* <li>
                   <button 
                     onClick={() => scrollToSection('features')} 
                     className="text-base text-upwork-gray-light hover:text-white transition-colors"
                   >
                     Blog
                   </button>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div>

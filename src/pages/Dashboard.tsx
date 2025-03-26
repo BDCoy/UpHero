@@ -5,11 +5,14 @@ import { TrendingUp, Users, FileText, Star, MessageSquare, BookOpen } from "luci
 import { Link } from "react-router-dom";
 import { Button } from "@/components/Button";
 import { useTrainingStore } from "@/lib/store/training";
+import { getCurrentSubscription } from "@/lib/revolut";
+import { SUBSCRIPTION_PLANS } from "@/lib/revolut/constants";
 
 export function Dashboard() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
+  const [subscription, setSubscription] = useState<any>(null);
   const { moduleProgress } = useTrainingStore();
 
   useEffect(() => {
@@ -29,8 +32,21 @@ export function Dashboard() {
       setLoadingProfile(false);
     };
 
+    const fetchSubscription = async () => {
+      if (user) {
+        const data = await getCurrentSubscription(user.id);
+        setSubscription(data);
+      }
+    };
+
     fetchProfile();
+    fetchSubscription();
   }, [user]);
+
+  // Get the current plan's limits
+  const currentPlan = SUBSCRIPTION_PLANS.find(
+    (plan) => plan.id === subscription?.selected_plan
+  ) || SUBSCRIPTION_PLANS[0]; // Default to free plan if no subscription
 
   // Calculate completed modules percentage
   const completedModules = moduleProgress.filter(Boolean).length;
@@ -40,27 +56,32 @@ export function Dashboard() {
   const stats = [
     {
       label: "Profile Analyses",
-      value: profile ? profile.profile_analysis_count : 0,
+      value: profile?.profile_analysis_count || 0,
+      limit: currentPlan.profile_analysis_limit || 0,
       icon: Users,
     },
     {
       label: "Cover Letters",
-      value: profile ? profile.cover_letter_count : 0,
+      value: profile?.cover_letter_count || 0,
+      limit: currentPlan.cover_letter_limit || 0,
       icon: FileText,
     },
     {
       label: "ATS Optimizations",
-      value: profile ? profile.ats_optimizer_count : 0,
+      value: profile?.ats_optimizer_count || 0,
+      limit: currentPlan.ats_optimizer_limit || 0,
       icon: Star,
     },
     {
       label: "Proposals Generated",
-      value: profile ? profile.proposal_generator_count : 0,
+      value: profile?.proposal_generator_count || 0,
+      limit: currentPlan.proposal_generator_limit || 0,
       icon: TrendingUp,
     },
     {
       label: "Client Messages",
-      value: profile ? profile.client_messages_count : 0,
+      value: profile?.client_messages_count || 0,
+      limit: currentPlan.client_messages_limit || 0,
       icon: MessageSquare,
     },
   ];
@@ -100,9 +121,10 @@ export function Dashboard() {
       </div>
 
       {/* Dashboard Stats */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {stats.map((stat) => {
           const Icon = stat.icon;
+          const percentage = (stat.value / stat.limit) * 100;
           return (
             <div
               key={stat.label}
@@ -116,10 +138,19 @@ export function Dashboard() {
                   {stat.label}
                 </p>
               </dt>
-              <dd className="ml-16 flex items-baseline">
-                <p className="text-2xl font-semibold text-gray-900">
-                  {stat.value}
-                </p>
+              <dd className="ml-16 flex flex-col">
+                <div className="flex items-baseline">
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {stat.value}
+                  </p>
+                  <p className="ml-2 text-sm text-gray-500">/ {stat.limit}</p>
+                </div>
+                <div className="mt-2 h-2 w-full bg-gray-200 rounded-full">
+                  <div
+                    className="h-full rounded-full bg-upwork-green transition-all duration-300"
+                    style={{ width: `${Math.min(percentage, 100)}%` }}
+                  />
+                </div>
               </dd>
             </div>
           );
@@ -128,7 +159,7 @@ export function Dashboard() {
 
       {/* Training Progress Section */}
       <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-upwork-background rounded-lg">
               <BookOpen className="h-6 w-6 text-upwork-green" />
@@ -141,7 +172,7 @@ export function Dashboard() {
             </div>
           </div>
           <Link to="/dashboard/personalized-training">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">
               Continue Training
             </Button>
           </Link>

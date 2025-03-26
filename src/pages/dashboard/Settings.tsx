@@ -17,7 +17,7 @@ interface Profile {
 }
 
 export function Settings() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -42,6 +42,7 @@ export function Settings() {
 
   const fetchSubscription = async () => {
     setIsLoadingSubscription(true);
+    if (!user) return;
     const data = await getCurrentSubscription(user.id);
 
     if (!data) {
@@ -62,7 +63,7 @@ export function Settings() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select("full_name, phone, avatar_url")
         .eq("id", user.id)
         .single();
 
@@ -163,30 +164,29 @@ export function Settings() {
     try {
       setIsDeleting(true);
 
-      if (profile?.avatar_url) {
-        const fileName = profile.avatar_url.split("/").pop();
-        if (fileName) {
-          await supabase.storage.from("avatars").remove([fileName]);
-        }
+      // Invoke the Supabase Edge Function to handle the deletion
+      const { error } = await supabase.functions.invoke("delete-user-account", {
+        body: {
+          user_id: user.id,
+        },
+      });
+
+      // If the Edge Function returns an error, show it to the user
+      if (error) {
+        throw error;
       }
 
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .delete()
-        .eq("id", user.id);
+      // If the deletion is successful, show a success message
+      toast.success("Account and related data successfully deleted");
+      signOut(); // Sign out the user after deleting the account
 
-      if (profileError) throw profileError;
-
-      const { error: authError } = await supabase.auth.signOut();
-      if (authError) throw authError;
-
-      toast.success("Your account has been deleted successfully");
+      // Optionally, handle any other necessary logic after the deletion (e.g., redirecting, etc.)
     } catch (error) {
       console.error("Error deleting account:", error);
       toast.error("Failed to delete account. Please try again.");
     } finally {
       setIsDeleting(false);
-      setShowDeleteDialog(false);
+      setShowDeleteDialog(false); // Close the delete confirmation dialog
     }
   };
 

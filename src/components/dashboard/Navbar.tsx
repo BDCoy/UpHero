@@ -26,9 +26,9 @@ export function Navbar({ onOpenSidebar, onSignOut }: NavbarProps) {
       {/* Right side navigation items - Always aligned to the right */}
       <div className="flex items-center pr-4 space-x-2 md:space-x-4">
         {/* Notifications */}
-        <button className="p-2 text-upwork-gray-light hover:text-upwork-gray rounded-lg hover:bg-upwork-background">
+        {/* <button className="p-2 text-upwork-gray-light hover:text-upwork-gray rounded-lg hover:bg-upwork-background">
           <Bell className="h-5 w-5" />
-        </button>
+        </button> */}
 
         {/* Profile dropdown */}
         <div className="relative">

@@ -10,8 +10,10 @@ import { RevolutCheckoutProvider } from "@/lib/RevolutCheckoutContext";
 import { PLAN_IDS } from "@/lib/revolut";
 import { toast } from "@/lib/store";
 
+import type { SignupFormData } from "@lib/validation";
+
 interface PlanStepProps {
-  onNext: (data: unknown) => void;
+  onNext: (data: Partial<SignupFormData>) => void;
   onBack: () => void;
   initialData: {
     planType: PLAN_IDS;
@@ -37,7 +39,7 @@ export function PlanStep({
   );
 
   const handlePaymentSuccess = () => {
-    toast.info(`Processing payment for plan: ${selectedPlan?.name}`)
+    toast.info(`Processing payment for plan: ${selectedPlan?.name}`);
     onNext(formik.values);
   };
   return (

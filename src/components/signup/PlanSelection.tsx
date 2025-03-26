@@ -1,11 +1,14 @@
 import React from "react";
-import { useFormik } from "formik";
+import { FormikProps } from "formik";
 import { Button } from "../Button";
 import { SUBSCRIPTION_PLANS } from "@/lib/revolut/constants";
 import { Clock, Star } from "lucide-react";
+import { PLAN_IDS } from "@/lib/revolut";
 
 interface PlanSelectionProps {
-  formik: ReturnType<typeof useFormik>;
+  formik: FormikProps<{
+    planType: PLAN_IDS;
+  }>;
   setIsCheckoutVisible: (visible: boolean) => void;
   onBack: () => void;
 }
@@ -15,6 +18,8 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({
   setIsCheckoutVisible,
   onBack,
 }) => {
+  const isSubmitDisabled = !formik.values.planType || !formik.isValid;
+
   return (
     <div>
       <div className="text-center mb-8">
@@ -129,7 +134,15 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({
         >
           Back
         </Button>
-        <Button type="submit" className="w-full ml-2">
+        <Button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            formik.handleSubmit();
+          }}
+          className="w-full ml-2"
+          disabled={isSubmitDisabled}
+        >
           Continue
         </Button>
       </div>

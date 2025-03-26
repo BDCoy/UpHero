@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useFormik } from 'formik';
-import { Button } from '../Button';
-import { signupValidationSchemas } from '../../lib/validation';
-import { Eye, EyeOff } from 'lucide-react';
+import { useState } from "react";
+import { useFormik } from "formik";
+import { Button } from "../Button";
+import { SignupFormData, signupValidationSchemas } from "../../lib/validation";
+import { Eye, EyeOff } from "lucide-react";
 
 interface AccountStepProps {
-  onNext: (data: any) => void;
+  onNext: (data: Partial<SignupFormData>) => void;
   onBack?: () => void;
   initialData: {
     email: string;
@@ -30,9 +30,14 @@ export function AccountStep({
 
   // Common input styles
   const baseInputClass =
-    'appearance-none block w-full px-3 py-2 rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green';
-  const getInputClass = (touched: boolean | undefined, errorMsg: string | undefined) =>
-    `${baseInputClass} border ${touched && errorMsg ? 'border-red-300' : 'border-upwork-gray-lighter'}`;
+    "appearance-none block w-full px-3 py-2 rounded-md shadow-sm placeholder-upwork-gray-light focus:outline-none focus:ring-upwork-green focus:border-upwork-green";
+  const getInputClass = (
+    touched: boolean | undefined,
+    errorMsg: string | undefined
+  ) =>
+    `${baseInputClass} border ${
+      touched && errorMsg ? "border-red-300" : "border-upwork-gray-lighter"
+    }`;
 
   const formik = useFormik({
     initialValues: initialData,
@@ -49,7 +54,10 @@ export function AccountStep({
     >
       {/* Full Name */}
       <div>
-        <label htmlFor="fullName" className="block text-sm font-medium text-upwork-gray">
+        <label
+          htmlFor="fullName"
+          className="block text-sm font-medium text-upwork-gray"
+        >
           Full Name
         </label>
         <div className="mt-1">
@@ -62,26 +70,34 @@ export function AccountStep({
               const capitalizedName = e.target.value
                 .toLowerCase()
                 .replace(/\b\w/g, (char) => char.toUpperCase());
-              formik.setFieldValue('fullName', capitalizedName);
+              formik.setFieldValue("fullName", capitalizedName);
             }}
             onBlur={formik.handleBlur}
-            className={getInputClass(formik.touched.fullName, formik.errors.fullName)}
+            className={getInputClass(
+              formik.touched.fullName,
+              formik.errors.fullName
+            )}
           />
           {formik.touched.fullName && formik.errors.fullName && (
-            <p className="mt-2 text-sm text-red-600">{formik.errors.fullName}</p>
+            <p className="mt-2 text-sm text-red-600">
+              {formik.errors.fullName}
+            </p>
           )}
         </div>
       </div>
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-upwork-gray">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-upwork-gray"
+        >
           Email address
         </label>
         <div className="mt-1">
           <input
             id="email"
-            {...formik.getFieldProps('email')}
+            {...formik.getFieldProps("email")}
             type="email"
             autoComplete="email"
             className={getInputClass(formik.touched.email, formik.errors.email)}
@@ -94,16 +110,22 @@ export function AccountStep({
 
       {/* Password */}
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-upwork-gray">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-upwork-gray"
+        >
           Password
         </label>
         <div className="mt-1 relative">
           <input
             id="password"
-            {...formik.getFieldProps('password')}
-            type={showPassword ? 'text' : 'password'}
+            {...formik.getFieldProps("password")}
+            type={showPassword ? "text" : "password"}
             autoComplete="new-password"
-            className={`${getInputClass(formik.touched.password, formik.errors.password)} pr-10`}
+            className={`${getInputClass(
+              formik.touched.password,
+              formik.errors.password
+            )} pr-10`}
           />
           <button
             type="button"
@@ -117,23 +139,31 @@ export function AccountStep({
             )}
           </button>
           {formik.touched.password && formik.errors.password && (
-            <p className="mt-2 text-sm text-red-600">{formik.errors.password}</p>
+            <p className="mt-2 text-sm text-red-600">
+              {formik.errors.password}
+            </p>
           )}
         </div>
       </div>
 
       {/* Confirm Password */}
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-upwork-gray">
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm font-medium text-upwork-gray"
+        >
           Confirm Password
         </label>
         <div className="mt-1 relative">
           <input
             id="confirmPassword"
-            {...formik.getFieldProps('confirmPassword')}
-            type={showConfirmPassword ? 'text' : 'password'}
+            {...formik.getFieldProps("confirmPassword")}
+            type={showConfirmPassword ? "text" : "password"}
             autoComplete="new-password"
-            className={`${getInputClass(formik.touched.confirmPassword, formik.errors.confirmPassword)} pr-10`}
+            className={`${getInputClass(
+              formik.touched.confirmPassword,
+              formik.errors.confirmPassword
+            )} pr-10`}
           />
           <button
             type="button"
@@ -147,7 +177,9 @@ export function AccountStep({
             )}
           </button>
           {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-            <p className="mt-2 text-sm text-red-600">{formik.errors.confirmPassword}</p>
+            <p className="mt-2 text-sm text-red-600">
+              {formik.errors.confirmPassword}
+            </p>
           )}
         </div>
       </div>
@@ -161,7 +193,7 @@ export function AccountStep({
         className="w-full"
         disabled={isLoading || !formik.isValid || formik.isSubmitting}
       >
-        {isLoading ? 'Creating account...' : 'Next'}
+        {isLoading ? "Creating account..." : "Next"}
       </Button>
 
       {/* Divider */}
@@ -170,7 +202,9 @@ export function AccountStep({
           <div className="w-full border-t border-upwork-gray-lighter" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-upwork-gray-light">Or continue with</span>
+          <span className="px-2 bg-white text-upwork-gray-light">
+            Or continue with
+          </span>
         </div>
       </div>
 

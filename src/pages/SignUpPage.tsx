@@ -26,7 +26,7 @@ export function SignUpPage() {
     country: "",
     city: "",
     goals: [],
-    planType: "pro",
+    planType: "freelancer_pro",
   });
 
   useEffect(() => {
@@ -74,7 +74,6 @@ export function SignUpPage() {
   const handleNext = async (stepData: Partial<SignupFormData>) => {
     const updatedData = { ...formData, ...stepData };
     setFormData(updatedData);
-
     try {
       setError(null);
       setIsLoading(true);
@@ -249,74 +248,73 @@ export function SignUpPage() {
 
   return (
     <AuthLayout>
-    <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-xl">
-        {/* Header */}
-        <div
-          className="text-center mb-8 animate-fade-down animate-once animate-duration-500"
-          style={{ animationDelay: '100ms' }}
-        >
-          <h2 className="text-3xl font-extrabold text-upwork-gray">
-            Create your account
-          </h2>
-          <p className="mt-2 text-sm text-upwork-gray-light">
-            Already have an account?{" "}
-            <Link
-              to="/signin"
-              className="font-medium text-upwork-green hover:text-upwork-green-dark"
+      <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-xl">
+          {/* Header */}
+          <div
+            className="text-center mb-8 animate-fade-down animate-once animate-duration-500"
+            style={{ animationDelay: "100ms" }}
+          >
+            <h2 className="text-3xl font-extrabold text-upwork-gray">
+              Create your account
+            </h2>
+            <p className="mt-2 text-sm text-upwork-gray-light">
+              Already have an account?{" "}
+              <Link
+                to="/signin"
+                className="font-medium text-upwork-green hover:text-upwork-green-dark"
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
+
+          <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
+            {/* Progress Bar */}
+            <div
+              className="bg-upwork-background px-8 py-6 border-b border-upwork-background-alt animate-fade-down animate-once animate-duration-500"
+              style={{ animationDelay: "200ms" }}
             >
-              Sign in
-            </Link>
-          </p>
-        </div>
-  
-        <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
-          {/* Progress Bar */}
-          <div
-            className="bg-upwork-background px-8 py-6 border-b border-upwork-background-alt animate-fade-down animate-once animate-duration-500"
-            style={{ animationDelay: '200ms' }}
-          >
-            <div className="flex justify-between items-center w-full">
-              {STEPS.map((step, index) => (
-                <div key={step.id} className="flex flex-col items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 ${
-                      index === currentStep - 1
-                        ? "bg-upwork-green text-white"
-                        : index < currentStep - 1
-                        ? "bg-upwork-green-light text-white"
-                        : "bg-upwork-background-alt text-upwork-gray-light"
-                    }`}
-                  >
-                    <step.icon className="w-5 h-5" />
+              <div className="flex justify-between items-center w-full">
+                {STEPS.map((step, index) => (
+                  <div key={step.id} className="flex flex-col items-center">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                        index === currentStep - 1
+                          ? "bg-upwork-green text-white"
+                          : index < currentStep - 1
+                          ? "bg-upwork-green-light text-white"
+                          : "bg-upwork-background-alt text-upwork-gray-light"
+                      }`}
+                    >
+                      <step.icon className="w-5 h-5" />
+                    </div>
+                    <span className="mt-2 text-xs font-medium text-upwork-gray-light">
+                      {step.label}
+                    </span>
                   </div>
-                  <span className="mt-2 text-xs font-medium text-upwork-gray-light">
-                    {step.label}
-                  </span>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="mt-6 h-1.5 bg-upwork-background-alt rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-upwork-green rounded-full transition-all duration-300 ease-in-out"
+                  style={{
+                    width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%`,
+                  }}
+                />
+              </div>
             </div>
-            <div className="mt-6 h-1.5 bg-upwork-background-alt rounded-full overflow-hidden">
-              <div
-                className="h-full bg-upwork-green rounded-full transition-all duration-300 ease-in-out"
-                style={{
-                  width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%`,
-                }}
-              />
+
+            {/* Content */}
+            <div
+              className="px-8 py-6 animate-fade-down animate-once animate-duration-500"
+              style={{ animationDelay: "300ms" }}
+            >
+              {getCurrentStep()}
             </div>
-          </div>
-  
-          {/* Content */}
-          <div
-            className="px-8 py-6 animate-fade-down animate-once animate-duration-500"
-            style={{ animationDelay: '300ms' }}
-          >
-            {getCurrentStep()}
           </div>
         </div>
-      </div>
-    </main>
-  </AuthLayout>
-  
+      </main>
+    </AuthLayout>
   );
 }
