@@ -10,7 +10,6 @@ import { useAuth } from "@/lib/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { createCoverLetter } from "@/lib/openai/cover-letter";
 import { SubscriptionModal } from "@/components/shared/SubscriptionModal";
-import { useNavigate } from "react-router-dom";
 import { checkSubscriptionStatus } from "@/lib/auth/authUtils";
 
 export function CoverLetter() {
@@ -26,7 +25,6 @@ export function CoverLetter() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { user } = useAuth();
-  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (text: string) => {
@@ -47,9 +45,14 @@ export function CoverLetter() {
       toast.error("Please enter the job description");
       return;
     }
-
+    if (!user) {
+      throw Error("Please signin to continue");
+    }
     // Check subscription status
-    const isSubscriptionValid = await checkSubscriptionStatus(navigate);
+    const isSubscriptionValid = await checkSubscriptionStatus(
+      user.id,
+      "cover_letter_count"
+    );
     if (!isSubscriptionValid) {
       setShowSubscriptionModal(true);
       return;
@@ -79,13 +82,20 @@ export function CoverLetter() {
 
       const newCount = (data?.cover_letter_count || 0) + 1;
 
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ cover_letter_count: newCount })
-        .eq("id", user?.id);
+      const { error } = await supabase.functions.invoke(
+        "update-profile-count", // Name of the edge function
+        {
+          body: {
+            analysisType: "cover_letter_count", // Specify the analysis type
+            user_id: user.id, // Pass the user_id to the Edge Function
+            new_count: newCount, // Pass the new count
+          },
+        }
+      );
 
-      if (updateError) {
-        console.error("Database update error:", updateError);
+      if (error) {
+        console.error("Error invoking edge function:", error);
+        return;
       }
     } catch (error) {
       toast.error("Failed to generate cover letter: " + error);

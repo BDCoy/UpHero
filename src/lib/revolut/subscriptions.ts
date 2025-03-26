@@ -126,6 +126,7 @@ export const verifyPaymentStatus = async (
 export const getCurrentSubscription = async (
   userId: string
 ): Promise<RevolutSubscription | null> => {
+
   const { data, error } = await supabase
     .from("subscriptions")
     .select("*")

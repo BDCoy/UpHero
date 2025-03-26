@@ -55,8 +55,14 @@ export interface SubscriptionPlan {
   price: number;
   period: string;
   features: string[];
-  popular?: true;
+  popular?: boolean;
+  profile_analysis_limit: number;
+  cover_letter_limit: number;
+  ats_optimizer_limit: number;
+  proposal_generator_limit: number;
+  client_messages_limit: number;
 }
+
 export type PLAN_IDS =
   | "free"
   | "freelancer"

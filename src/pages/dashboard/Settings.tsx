@@ -118,7 +118,7 @@ export function Settings() {
         }
 
         // Upload new avatar
-        const { error: uploadError, data } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from("avatars")
           .upload(fileName, avatarFile);
 

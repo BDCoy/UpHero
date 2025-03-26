@@ -11,13 +11,11 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthProvider";
 import { generateATSRecommendations } from "@/lib/openai/ats-optimizer";
 import { checkSubscriptionStatus } from "@/lib/auth/authUtils";
-import { useNavigate } from "react-router-dom";
 import { SubscriptionModal } from "@/components/shared/SubscriptionModal";
 
 export function ATSOptimizer() {
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { user } = useAuth();
-  const navigate = useNavigate();
   const {
     cvContent,
     jobDescription,
@@ -44,8 +42,15 @@ export function ATSOptimizer() {
       toast.error("Please enter the job description");
       return;
     }
+
+    if (!user) {
+      throw Error("Please signin to continue");
+    }
     // Check subscription status
-    const isSubscriptionValid = await checkSubscriptionStatus(navigate);
+    const isSubscriptionValid = await checkSubscriptionStatus(
+      user.id,
+      "ats_optimizer_count"
+    );
     if (!isSubscriptionValid) {
       setShowSubscriptionModal(true);
       return;
@@ -73,13 +78,20 @@ export function ATSOptimizer() {
 
       const newCount = (data?.ats_optimizer_count || 0) + 1;
 
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ ats_optimizer_count: newCount })
-        .eq("id", user?.id);
+      const { error } = await supabase.functions.invoke(
+        "update-profile-count", // Name of the edge function
+        {
+          body: {
+            analysisType: "ats_optimizer_count", // Specify the analysis type
+            user_id: user.id, // Pass the user_id to the Edge Function
+            new_count: newCount, // Pass the new count
+          },
+        }
+      );
 
-      if (updateError) {
-        console.error("Database update error:", updateError);
+      if (error) {
+        console.error("Error invoking edge function:", error);
+        return;
       }
     } catch (error) {
       console.error(error);

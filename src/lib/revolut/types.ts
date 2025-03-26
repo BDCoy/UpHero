@@ -56,10 +56,18 @@ export interface SubscriptionPlan {
   period: string;
   features: string[];
   popular?: boolean;
+  profile_analysis_limit: number;
+  cover_letter_limit: number;
+  ats_optimizer_limit: number;
+  proposal_generator_limit: number;
+  client_messages_limit: number;
 }
 
-export type PLAN_IDS = "free" | "freelancer" | "freelancer_pro" | "freelancer_agency";
-
+export type PLAN_IDS =
+  | "free"
+  | "freelancer"
+  | "freelancer_pro"
+  | "freelancer_agency";
 
 export type PAYMENT_STATE =
   | "pending"
