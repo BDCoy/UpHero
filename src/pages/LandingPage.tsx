@@ -45,7 +45,7 @@ const features = [
     icon: FileSpreadsheet,
     title: "Cover Letter Builder",
     description:
-      "Create professional, Upwork-optimized cover letters that highlight your expertise and increase your hiring potential.",
+      "Create professional, Optimized cover letters that highlight your expertise and increase your hiring potential.",
     benefits: [
       "ATS-friendly templates",
       "Skill-based customization",
