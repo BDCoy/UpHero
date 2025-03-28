@@ -8,7 +8,11 @@
 
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { prodApiUrl, sandboxApiUrl } from "../_shared/constants.ts";
+import {
+  prodApiUrl,
+  sandboxApiUrl,
+  SUBSCRIPTION_PLANS,
+} from "../_shared/constants.ts";
 
 // Initialize Supabase client with environment variables
 const supabase = createClient(
@@ -62,8 +66,6 @@ serve(async (req) => {
 
     switch (eventType) {
       case "ORDER_COMPLETED":
-      case "ORDER_AUTHORISED":
-      case "ORDER_PAYMENT_AUTHENTICATED":
         newState = "completed"; // For these events, set state to 'completed'
         break;
 
@@ -103,7 +105,7 @@ serve(async (req) => {
       const { data: subscriptionData, error: subscriptionFetchError } =
         await supabase
           .from("subscriptions")
-          .select("user_id")
+          .select("*")
           .eq("revolut_order_id", orderId)
           .single();
 
@@ -124,7 +126,7 @@ serve(async (req) => {
       if (newState === "completed") {
         const userId = subscriptionData.user_id;
         // Step 3: Update profile usage counters when the state is 'completed'
-        const { error: profileUpdateError } = await supabase
+        const { data: profileData, error: profileUpdateError } = await supabase
           .from("profiles")
           .update({
             profile_analysis_count: 0,
@@ -133,7 +135,9 @@ serve(async (req) => {
             cover_letter_count: 0,
             client_messages_count: 0,
           })
-          .eq("id", userId);
+          .eq("id", userId)
+          .select()
+          .single();
 
         if (profileUpdateError) {
           console.error(
@@ -169,6 +173,56 @@ serve(async (req) => {
               headers: { "Content-Type": "application/json" },
             }
           );
+        }
+        if (!profileData || !subscriptionData) {
+          return new Response(
+            JSON.stringify({
+              error: "Profile or Subscription data not found.",
+            }),
+            {
+              status: 400,
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        }
+
+        const selectedPlan = SUBSCRIPTION_PLANS.find(
+          (plan) => plan.id === subscriptionData.selected_plan
+        );
+
+        const selectedPlanName =
+          subscriptionData.selected_plan === "free"
+            ? SUBSCRIPTION_PLANS[1].name
+            : selectedPlan?.name;
+        
+        const isFreeTrial = subscriptionData.selected_plan === "free";
+
+        const planAmonut = !isFreeTrial
+          ? (subscriptionData.amount / 100).toFixed(2)
+          : SUBSCRIPTION_PLANS[1].price.toFixed(2);
+
+        //Step 5: Send email to user with the payment status
+
+        const payload = {
+          name: profileData.full_name,
+          email: profileData.email,
+          order_id: orderId,
+          amount: planAmonut,
+          plan: selectedPlanName,
+          is_free_trial: isFreeTrial,
+        };
+
+        console.log(payload);
+
+        const { error } = await supabase.functions.invoke(
+          "send-order-confirmation-email", // Changed edge function name here
+          {
+            body: payload,
+          }
+        );
+
+        if (error) {
+          throw new Error(error.message);
         }
       }
     }

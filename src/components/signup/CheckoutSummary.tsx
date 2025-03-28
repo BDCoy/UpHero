@@ -65,7 +65,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
             <div className="rounded-lg bg-orange-50 p-4 text-sm text-orange-700">
               <p className="font-medium">Important Note:</p>
               <p className="mt-1">
-                After 14 days, you'll be automatically charged{" "}
+                After 3 days, you'll be automatically charged{" "}
                 <strong>{SUBSCRIPTION_PLANS[1].price}$</strong> for the{" "}
                 {SUBSCRIPTION_PLANS[1].name} Plan unless you cancel.
               </p>

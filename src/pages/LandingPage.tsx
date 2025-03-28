@@ -1,65 +1,78 @@
-import React from 'react';
-import { Button } from '../components/Button';
-import { Logo } from '../components/Logo';
-import { useAuth } from '../lib/AuthProvider';
-import { ArrowRight, CheckCircle, FileSearch, FileSpreadsheet, BookOpen, Target, BrainCircuit, Award, Star, Users, Rocket, Globe } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { SUBSCRIPTION_PLANS } from '@/lib/revolut';
+import { Button } from "../components/Button";
+
+import {
+  ArrowRight,
+  CheckCircle,
+  FileSearch,
+  FileSpreadsheet,
+  BookOpen,
+  BrainCircuit,
+  Award,
+  Star,
+  Users,
+  Rocket,
+  Globe,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { SUBSCRIPTION_PLANS } from "@/lib/revolut";
 
 const features = [
   {
     icon: FileSearch,
-    title: 'Smart Profile Analysis',
-    description: 'Our AI-powered analyzer scans your Upwork profile, identifies weak spots, and provides actionable recommendations to stand out from competitors.',
+    title: "Smart Profile Analysis",
+    description:
+      "Our AI-powered analyzer scans your Upwork profile, identifies weak spots, and provides actionable recommendations to stand out from competitors.",
     benefits: [
-      'Keyword optimization for better visibility',
-      'Portfolio presentation analysis',
-      'Rate positioning recommendations',
-      'Success rate improvement tips'
-    ]
+      "Keyword optimization for better visibility",
+      "Portfolio presentation analysis",
+      "Rate positioning recommendations",
+      "Success rate improvement tips",
+    ],
   },
   {
     icon: BrainCircuit,
-    title: 'AI Proposal Generator',
-    description: 'Generate highly personalized proposals that resonate with clients using our advanced AI technology trained on successful Upwork bids.',
+    title: "AI Proposal Generator",
+    description:
+      "Generate highly personalized proposals that resonate with clients using our advanced AI technology trained on successful Upwork bids.",
     benefits: [
-      'Client-specific customization',
-      'Success rate analysis',
-      'Competitive differentiation',
-      'Tone and style optimization'
-    ]
+      "Client-specific customization",
+      "Success rate analysis",
+      "Competitive differentiation",
+      "Tone and style optimization",
+    ],
   },
   {
     icon: FileSpreadsheet,
-    title: 'Cover Letter Builder',
-    description: 'Create professional, Upwork-optimized cover letters that highlight your expertise and increase your hiring potential.',
+    title: "Cover Letter Builder",
+    description:
+      "Create professional, Upwork-optimized cover letters that highlight your expertise and increase your hiring potential.",
     benefits: [
-      'ATS-friendly templates',
-      'Skill-based customization',
-      'Automatic formatting',
-      'PDF export capability'
-    ]
+      "ATS-friendly templates",
+      "Skill-based customization",
+      "Automatic formatting",
+      "PDF export capability",
+    ],
   },
   {
     icon: BookOpen,
-    title: 'Personalized Training',
-    description: 'Access custom-tailored training modules and expert advice to enhance your freelancing success on Upwork.',
+    title: "Personalized Training",
+    description:
+      "Access custom-tailored training modules and expert advice to enhance your freelancing success on Upwork.",
     benefits: [
-      'Industry-specific guidance',
-      'Proposal writing workshops',
-      'Client communication tips',
-      'Success story analysis'
-    ]
-  }
+      "Industry-specific guidance",
+      "Proposal writing workshops",
+      "Client communication tips",
+      "Success story analysis",
+    ],
+  },
 ];
 
 const stats = [
-  { number: '93%', label: 'Profile Improvement' },
-  { number: '75%', label: 'Higher Response Rate' },
-  { number: '2.5x', label: 'More Interviews' },
-  { number: '85%', label: 'Client Satisfaction' }
+  { number: "93%", label: "Profile Improvement" },
+  { number: "75%", label: "Higher Response Rate" },
+  { number: "2.5x", label: "More Interviews" },
+  { number: "85%", label: "Client Satisfaction" },
 ];
-
 
 export function LandingPage() {
   return (
@@ -75,7 +88,9 @@ export function LandingPage() {
             <div className="text-center">
               <div className="inline-flex items-center justify-center px-4 py-2 mb-8 rounded-full bg-upwork-background text-upwork-green ring-1 ring-upwork-green/10">
                 <Award className="h-5 w-5 mr-2" />
-                <span className="text-sm font-medium">Trusted by 10,000+ Top-Rated Upwork Freelancers</span>
+                <span className="text-sm font-medium">
+                  Trusted by 10,000+ Top-Rated Upwork Freelancers
+                </span>
               </div>
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-upwork-gray tracking-tight">
                 <span className="block">Transform Your</span>
@@ -84,7 +99,9 @@ export function LandingPage() {
                 </span>
               </h1>
               <p className="mt-6 max-w-2xl mx-auto text-xl text-upwork-gray-light leading-relaxed">
-                Use AI-powered analysis, smart proposals, and expert training to become a top-rated Upwork freelancer. Stand out from the competition and win more clients.
+                Use AI-powered analysis, smart proposals, and expert training to
+                become a top-rated Upwork freelancer. Stand out from the
+                competition and win more clients.
               </p>
               <div className="mt-8 max-w-md mx-auto sm:flex sm:justify-center md:mt-10">
                 <Link to="/signup" className="w-full sm:w-auto">
@@ -111,8 +128,12 @@ export function LandingPage() {
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl font-extrabold text-upwork-green">{stat.number}</div>
-                <div className="mt-2 text-sm text-upwork-gray-light">{stat.label}</div>
+                <div className="text-4xl font-extrabold text-upwork-green">
+                  {stat.number}
+                </div>
+                <div className="mt-2 text-sm text-upwork-gray-light">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
@@ -140,14 +161,20 @@ export function LandingPage() {
                     <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-upwork-green to-upwork-green-light text-white">
                       <feature.icon className="h-6 w-6" />
                     </div>
-                    <h3 className="ml-4 text-xl font-semibold text-upwork-gray">{feature.title}</h3>
+                    <h3 className="ml-4 text-xl font-semibold text-upwork-gray">
+                      {feature.title}
+                    </h3>
                   </div>
-                  <p className="mt-4 text-upwork-gray-light leading-relaxed">{feature.description}</p>
+                  <p className="mt-4 text-upwork-gray-light leading-relaxed">
+                    {feature.description}
+                  </p>
                   <ul className="mt-6 space-y-3">
                     {feature.benefits.map((benefit, benefitIndex) => (
                       <li key={benefitIndex} className="flex items-start">
                         <CheckCircle className="h-5 w-5 text-upwork-green mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-upwork-gray-light">{benefit}</span>
+                        <span className="text-upwork-gray-light">
+                          {benefit}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -176,8 +203,8 @@ export function LandingPage() {
                 key={plan.name}
                 className={`relative rounded-2xl ${
                   plan.popular
-                    ? 'bg-gradient-to-b from-upwork-green to-upwork-green-dark text-white shadow-xl scale-105 z-10'
-                    : 'bg-white'
+                    ? "bg-gradient-to-b from-upwork-green to-upwork-green-dark text-white shadow-xl scale-105 z-10"
+                    : "bg-white"
                 }`}
               >
                 <div className="p-8">
@@ -189,17 +216,35 @@ export function LandingPage() {
                     </div>
                   )}
                   <div className="flex justify-between items-center">
-                    <h3 className={`text-2xl font-bold ${plan.popular ? 'text-white' : 'text-upwork-gray'}`}>
+                    <h3
+                      className={`text-2xl font-bold ${
+                        plan.popular ? "text-white" : "text-upwork-gray"
+                      }`}
+                    >
                       {plan.name}
                     </h3>
-                    {plan.popular && <Star className="h-6 w-6 text-yellow-300" />}
+                    {plan.popular && (
+                      <Star className="h-6 w-6 text-yellow-300" />
+                    )}
                   </div>
-                  <p className={`mt-4 text-sm ${plan.popular ? 'text-white/90' : 'text-upwork-gray-light'}`}>
+                  <p
+                    className={`mt-4 text-sm ${
+                      plan.popular ? "text-white/90" : "text-upwork-gray-light"
+                    }`}
+                  >
                     {plan?.description}
                   </p>
                   <div className="mt-6 flex items-baseline">
-                    <span className="text-4xl font-extrabold">{plan.price}$</span>
-                    <span className={`ml-1 text-lg ${plan.popular ? 'text-white/90' : 'text-upwork-gray-light'}`}>
+                    <span className="text-4xl font-extrabold">
+                      {plan.price}$
+                    </span>
+                    <span
+                      className={`ml-1 text-lg ${
+                        plan.popular
+                          ? "text-white/90"
+                          : "text-upwork-gray-light"
+                      }`}
+                    >
                       {plan.period}
                     </span>
                   </div>
@@ -207,23 +252,37 @@ export function LandingPage() {
                     <Button
                       className={`mt-8 w-full ${
                         plan.popular
-                          ? 'bg-white text-upwork-green hover:bg-upwork-background'
-                          : ''
+                          ? "bg-white text-upwork-green hover:bg-upwork-background"
+                          : ""
                       }`}
-                      variant={plan.popular ? 'secondary' : 'primary'}
+                      variant={plan.popular ? "secondary" : "primary"}
                     >
                       Get Started
                     </Button>
                   </Link>
                 </div>
-                <div className={`px-8 pb-8 ${plan.popular ? 'border-t border-white/20' : 'border-t border-upwork-background'}`}>
+                <div
+                  className={`px-8 pb-8 ${
+                    plan.popular
+                      ? "border-t border-white/20"
+                      : "border-t border-upwork-background"
+                  }`}
+                >
                   <ul className="mt-6 space-y-4">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-start">
-                        <CheckCircle className={`flex-shrink-0 h-5 w-5 ${
-                          plan.popular ? 'text-white/80' : 'text-upwork-green'
-                        }`} />
-                        <span className={`ml-3 text-sm ${plan.popular ? 'text-white/90' : 'text-upwork-gray-light'}`}>
+                        <CheckCircle
+                          className={`flex-shrink-0 h-5 w-5 ${
+                            plan.popular ? "text-white/80" : "text-upwork-green"
+                          }`}
+                        />
+                        <span
+                          className={`ml-3 text-sm ${
+                            plan.popular
+                              ? "text-white/90"
+                              : "text-upwork-gray-light"
+                          }`}
+                        >
                           {feature}
                         </span>
                       </li>
@@ -257,25 +316,37 @@ export function LandingPage() {
                 <div className="space-y-6">
                   <div className="bg-white rounded-2xl shadow-lg p-6 transform hover:-translate-y-1 transition duration-300">
                     <Users className="h-8 w-8 text-upwork-green mb-3" />
-                    <h3 className="text-lg font-semibold text-upwork-gray">Global Community</h3>
-                    <p className="mt-2 text-upwork-gray-light">10,000+ freelancers from over 100 countries</p>
+                    <h3 className="text-lg font-semibold text-upwork-gray">
+                      Global Community
+                    </h3>
+                    <p className="mt-2 text-upwork-gray-light">
+                      10,000+ freelancers from over 100 countries
+                    </p>
                   </div>
                   <div className="bg-gradient-to-br from-upwork-green to-upwork-green-light rounded-2xl shadow-lg p-6 text-white transform hover:-translate-y-1 transition duration-300">
                     <Rocket className="h-8 w-8 text-white mb-3" />
                     <h3 className="text-lg font-semibold">Rapid Growth</h3>
-                    <p className="mt-2 text-white/90">150% year-over-year growth</p>
+                    <p className="mt-2 text-white/90">
+                      150% year-over-year growth
+                    </p>
                   </div>
                 </div>
                 <div className="space-y-6 pt-12">
                   <div className="bg-white rounded-2xl shadow-lg p-6 transform hover:-translate-y-1 transition duration-300">
                     <Globe className="h-8 w-8 text-upwork-green mb-3" />
-                    <h3 className="text-lg font-semibold text-upwork-gray">Platform Support</h3>
-                    <p className="mt-2 text-upwork-gray-light">Compatible with major freelance platforms</p>
+                    <h3 className="text-lg font-semibold text-upwork-gray">
+                      Platform Support
+                    </h3>
+                    <p className="mt-2 text-upwork-gray-light">
+                      Compatible with major freelance platforms
+                    </p>
                   </div>
                   <div className="bg-gradient-to-br from-upwork-green to-upwork-green-light rounded-2xl shadow-lg p-6 text-white transform hover:-translate-y-1 transition duration-300">
                     <Award className="h-8 w-8 text-white mb-3" />
                     <h3 className="text-lg font-semibold">Success Rate</h3>
-                    <p className="mt-2 text-white/90">85% client satisfaction rate</p>
+                    <p className="mt-2 text-white/90">
+                      85% client satisfaction rate
+                    </p>
                   </div>
                 </div>
               </div>
@@ -284,15 +355,29 @@ export function LandingPage() {
             <div className="lg:pl-12">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-upwork-gray mb-4">Our Story</h3>
+                  <h3 className="text-2xl font-bold text-upwork-gray mb-4">
+                    Our Story
+                  </h3>
                   <p className="text-upwork-gray-light leading-relaxed">
-                    Founded in 2025, UpHero emerged from a simple observation: talented freelancers often struggle to stand out in an increasingly competitive market. Our team of former successful freelancers and AI experts came together to create a platform that leverages artificial intelligence to help freelancers optimize their profiles, craft winning proposals, and build successful careers.
+                    Founded in 2025, UpHero emerged from a simple observation:
+                    talented freelancers often struggle to stand out in an
+                    increasingly competitive market. Our team of former
+                    successful freelancers and AI experts came together to
+                    create a platform that leverages artificial intelligence to
+                    help freelancers optimize their profiles, craft winning
+                    proposals, and build successful careers.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-upwork-gray mb-4">Our Mission</h3>
+                  <h3 className="text-2xl font-bold text-upwork-gray mb-4">
+                    Our Mission
+                  </h3>
                   <p className="text-upwork-gray-light leading-relaxed">
-                    We're on a mission to democratize success in the freelance economy. By combining AI technology with human expertise, we help freelancers of all experience levels compete effectively and build sustainable careers on platforms like Upwork.
+                    We're on a mission to democratize success in the freelance
+                    economy. By combining AI technology with human expertise, we
+                    help freelancers of all experience levels compete
+                    effectively and build sustainable careers on platforms like
+                    Upwork.
                   </p>
                 </div>
                 <div className="pt-6">
@@ -317,11 +402,16 @@ export function LandingPage() {
               Ready to Transform Your Upwork Career?
             </h2>
             <p className="mt-4 text-xl text-white/90">
-              Join thousands of successful freelancers who have elevated their Upwork presence
+              Join thousands of successful freelancers who have elevated their
+              Upwork presence
             </p>
             <div className="mt-8">
               <Link to="/signup">
-                <Button size="lg" variant="secondary" className="text-upwork-green">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="text-upwork-green"
+                >
                   Get Started Free
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>

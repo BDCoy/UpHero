@@ -11,14 +11,13 @@ import React, {
 import RevolutCheckout, {
   getRevolutPayOrderIdURLParam,
 } from "@revolut/checkout";
-import { PLAN_IDS, RevolutOrder, RevolutSubscription } from "./revolut/types";
+import { PLAN_IDS, RevolutOrder } from "./revolut/types";
 import { RevolutPaymentsModuleInstance } from "@revolut/checkout";
 import { createPaymentRequest, setupRevolutCheckout } from "./revolut/checkout";
 import { supabase } from "./supabase";
 import { ENVIRONMENT } from "@/env";
 import {
   getLatestPendingSubscription,
-  modifySubscriptionStatus,
   registerSubscription,
   verifyPaymentStatus,
 } from "./revolut/subscriptions";
@@ -189,7 +188,7 @@ export const RevolutCheckoutProvider = ({
         revolutPay.mount(revolutPayRef.current, paymentOptions);
 
         revolutPay.on("payment", async (event) => {
-          return await handlePaymentEvent(event.type, newOrder.id);
+          return await handlePaymentEvent(event.type);
         });
         initPaymentRequest(newOrder, "googlePay", paymentGoogleRequestRef);
         initPaymentRequest(newOrder, "applePay", paymentAppleRequestRef);
@@ -239,26 +238,16 @@ export const RevolutCheckoutProvider = ({
     }
   }, [error]);
 
-  const handlePaymentEvent = async (eventType: string, orderId: string) => {
+  const handlePaymentEvent = async (eventType: string) => {
     switch (eventType) {
       case "success": {
-        const { error } = await modifySubscriptionStatus(orderId, "completed");
-        if (error) {
-          setError("Error: failed to modify subscription status");
-          return;
-        }
         handlePaymentSuccess();
         break;
       }
       case "error": {
-        const { error: err } = await modifySubscriptionStatus(
-          orderId,
-          "failed"
+        setError(
+          "There was an error processing your payment. Please try again."
         );
-        if (err) {
-          setError("Error: failed to modify subscription status");
-          return;
-        }
         break;
       }
       case "cancel":
@@ -333,13 +322,13 @@ export const RevolutCheckoutProvider = ({
       email: user?.email,
       savePaymentMethodFor: "merchant",
       onSuccess() {
-        handlePaymentEvent("success", newOrder.id);
+        handlePaymentEvent("success");
       },
       onError() {
-        handlePaymentEvent("error", newOrder.id);
+        handlePaymentEvent("error");
       },
       onCancel() {
-        handlePaymentEvent("cancel", newOrder.id);
+        handlePaymentEvent("cancel");
       },
     });
   };

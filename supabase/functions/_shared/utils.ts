@@ -4,7 +4,7 @@ export const calculateEndDate = (plan: string): string => {
 
   switch (plan) {
     case "free":
-      endDate = new Date(today.setDate(today.getDate() + 3)); // 14 days from now
+      endDate = new Date(today.setDate(today.getDate() + 3)); // 3 days from now
       break;
     case "freelancer":
       endDate = new Date(today.setMonth(today.getMonth() + 1)); // 1 month from now

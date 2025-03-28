@@ -90,7 +90,7 @@ export const PlanSelection: React.FC<PlanSelectionProps> = ({
                   {isFree && (
                     <div className="mt-3 p-3 bg-orange-50 border border-orange-100 rounded-lg">
                       <p className="text-sm text-orange-700">
-                        Start with a <strong>Free Trial</strong>. After 14 days,
+                        Start with a <strong>Free Trial</strong>. After 3 days,
                         you'll be automatically charged{" "}
                         <strong>{SUBSCRIPTION_PLANS[1].price}$</strong> for the{" "}
                         {SUBSCRIPTION_PLANS[1].name} Plan unless you cancel.

@@ -3,6 +3,7 @@ import { SubscriptionPlan } from "./interfaces.ts";
 // API URLs
 export const sandboxApiUrl = "https://sandbox-merchant.revolut.com/api";
 export const prodApiUrl = "https://merchant.revolut.com/api";
+export const resendApiUrl = "https://api.resend.com/emails";
 
 export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {

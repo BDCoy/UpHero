@@ -123,26 +123,43 @@ export const verifyPaymentStatus = async (
   }
 };
 
-export const getCurrentSubscription = async (
-  userId: string
-): Promise<RevolutSubscription | null> => {
-
+export const getCurrentSubscription = async (userId: string) => {
+  // Try to fetch the subscription with state 'completed'
   const { data, error } = await supabase
     .from("subscriptions")
     .select("*")
     .eq("user_id", userId)
-    .neq("state", "pending")
-    .neq("state", "processing")
-    .neq("state", "authorised")
-    .neq("state", "failed")
+    .eq("state", "completed")
     .order("created_at", { ascending: false })
     .limit(1)
     .single();
 
+  // If no completed subscription is found, try to fetch the latest inactive or cancelled subscription
+  if (!data) {
+    const { data: fallbackData, error: fallbackError } = await supabase
+      .from("subscriptions")
+      .select("*")
+      .eq("user_id", userId)
+      .in("state", ["inactive", "cancelled"]) // Filter for inactive or cancelled states
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    // Check for errors during fallback query
+    if (fallbackError) {
+      console.error("Error fetching fallback subscription:", fallbackError);
+      return null;
+    }
+
+    return fallbackData ?? null;
+  }
+
+  // Check for errors in the primary query
   if (error) {
     console.error("Error fetching current subscription:", error);
     return null;
   }
 
+  // Return the completed subscription or null if not found
   return data ?? null;
 };
