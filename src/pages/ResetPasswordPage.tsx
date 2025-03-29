@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "../components/Button";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Eye, EyeOff } from "lucide-react";
 import { AuthLayout } from "../components/AuthLayout";
 import { supabase } from "../lib/supabase";
 import { toast } from "@/lib/store";
@@ -186,10 +186,14 @@ export function ResetPasswordPage() {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
+                    onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-upwork-gray-light hover:text-upwork-gray"
                   >
-                    {showPassword ? "Hide" : "Show"}
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" aria-hidden="true" />
+                    ) : (
+                      <Eye className="h-5 w-5" aria-hidden="true" />
+                    )}
                   </button>
                   {formik.touched.password && formik.errors.password && (
                     <p className="mt-2 text-sm text-red-600">
@@ -218,12 +222,17 @@ export function ResetPasswordPage() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
+
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword((prev) => !prev)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-upwork-gray-light hover:text-upwork-gray"
                   >
-                    {showConfirmPassword ? "Hide" : "Show"}
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-5 w-5" aria-hidden="true" />
+                    ) : (
+                      <Eye className="h-5 w-5" aria-hidden="true" />
+                    )}
                   </button>
                   {formik.touched.confirmPassword &&
                     formik.errors.confirmPassword && (

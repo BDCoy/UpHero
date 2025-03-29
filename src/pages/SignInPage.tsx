@@ -36,6 +36,26 @@ export function SignInPage() {
     );
   }
 
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/signin",
+          scopes: "openid email profile",
+        },
+      });
+      if (authError) throw new Error("Failed to sign in with google ");
+    } catch (err) {
+      console.error("Google sign in error:", err);
+      toast.error("Google sign in error: " + err);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AuthLayout>
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -216,6 +236,7 @@ export function SignInPage() {
               <div className="mt-6">
                 <button
                   type="button"
+                  onClick={handleGoogleSignIn}
                   className="w-full inline-flex justify-center items-center py-2 px-4 border border-upwork-gray-lighter rounded-md shadow-sm bg-white text-sm font-medium text-upwork-gray-light hover:bg-upwork-background"
                 >
                   <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">

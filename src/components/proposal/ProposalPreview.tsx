@@ -77,11 +77,11 @@ export function ProposalPreview({ proposal }: ProposalPreviewProps) {
       )}
 
       {/* Question Responses Section */}
-      {proposal.questionResponses.length > 0 && (
+      {proposal?.questionResponses?.length > 0 && (
         <div className="p-6">
           <h2 className="text-lg font-semibold text-upwork-gray mb-4">Question Responses</h2>
           <div className="space-y-4">
-            {proposal.questionResponses.map((response, index) => (
+            {proposal?.questionResponses?.map((response, index) => (
               <div key={index} className="bg-upwork-background rounded-lg p-4">
                 <p className="font-medium text-upwork-gray mb-2">{response.question}</p>
                 <p className="text-upwork-gray-light">{response.answer}</p>

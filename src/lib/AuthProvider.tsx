@@ -46,7 +46,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    await supabase.auth.signOut({
+      scope: "global",
+    });
     setIsAuthenticated(false);
     setUser(null);
   };

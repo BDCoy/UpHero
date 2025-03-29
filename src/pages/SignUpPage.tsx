@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@lib/supabase";
 import { AuthLayout } from "@components/AuthLayout";
 import { AccountStep } from "@components/signup/AccountStep";
@@ -28,6 +28,33 @@ export function SignUpPage() {
     goals: [],
     planType: "freelancer_pro",
   });
+  const [searchParams] = useSearchParams();
+  const isGoogleSignupVerified = searchParams.get("verified");
+  const hasExecuted = useRef(false);
+
+  useEffect(() => {
+    const handleGoogleSignUp = async () => {
+      if (!isGoogleSignupVerified || hasExecuted.current) return;
+      hasExecuted.current = true;
+
+      try {
+        setIsLoading(true);
+        setError(null);
+        const user = await signUpGoogleUser(true);
+        if (!user) throw new Error("Failed to create account");
+        setCurrentStep((prev) => prev + 1);
+      } catch (err) {
+        console.error("Google sign-in error:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to sign in with Google"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    handleGoogleSignUp();
+  }, [isGoogleSignupVerified]);
 
   useEffect(() => {
     const validateSignupStatus = async () => {
@@ -70,6 +97,108 @@ export function SignUpPage() {
 
     validateSignupStatus();
   }, [navigate]);
+
+  const signUpGoogleUser = async (verified: boolean = false) => {
+    try {
+      if (!verified) {
+        // Step 1: Initiate Google OAuth login
+        const { error: authError } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin + "/signup?verified=true",
+            scopes: "openid email profile",
+          },
+        });
+
+        if (authError) throw authError;
+      }
+
+      // Step 2: Wait for session with retry logic
+      let user = null;
+      let retries = 0;
+      const maxRetries = 5;
+      const retryDelay = 500; // milliseconds
+
+      while (retries < maxRetries && !user) {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        user = session?.user;
+
+        if (!user) {
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
+          retries++;
+        }
+      }
+
+      if (!user) {
+        throw new Error("Failed to retrieve user session after Google sign-in");
+      }
+
+      console.log("Google Sign-In Successful:", user);
+
+      // Step 3: Extract and normalize user metadata
+      const userId = user.id;
+      const userEmail = user.email!;
+      const userName =
+        user.user_metadata?.name || user.user_metadata?.full_name || userEmail;
+
+      // Step 4: Check for existing profile using efficient query
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (profileError) throw profileError;
+
+      // Step 5: Create profile if missing
+      if (!profile) {
+        console.log("Creating new profile for Google user...");
+
+        const { error: upsertError } = await supabase.from("profiles").upsert(
+          {
+            id: userId,
+            full_name: userName,
+            email: userEmail,
+            current_signup_step: 2,
+            updated_at: new Date().toISOString(),
+          },
+          {
+            onConflict: "id",
+          }
+        );
+
+        if (upsertError) throw upsertError;
+        console.log("New profile created for Google user");
+      } else {
+
+        throw new Error("User profile already exists please sign in");
+      }
+
+      return user;
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      throw error;
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const user = await signUpGoogleUser();
+      if (!user) throw new Error("Failed to create account");
+      setCurrentStep((prev) => prev + 1);
+    } catch (err) {
+      console.error("Google sign in error:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to sign in with Google"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleNext = async (stepData: Partial<SignupFormData>) => {
     const updatedData = { ...formData, ...stepData };
@@ -193,6 +322,7 @@ export function SignUpPage() {
               fullName: formData.fullName,
             }}
             isLoading={isLoading}
+            onGoogleSignIn={handleGoogleSignIn}
             error={error}
           />
         );
