@@ -1,4 +1,4 @@
-import { Button } from "../Button";
+import { Button } from "@components/ui/Button";
 import { Loader2 } from "lucide-react";
 
 interface MessageFormProps {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@components/Button";
+import { Button } from "@components/ui/Button";
 import { AuthLayout } from "@components/AuthLayout";
 import { CheckCircle } from "lucide-react";
 

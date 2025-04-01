@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { toast } from "@lib/store";
-import { Button } from "@components/Button";
+import { Button } from "@components/ui/Button";
 import { CVUploader } from "@components/cover-letter/CVUploader";
 import { JobDescriptionForm } from "@components/ats-optimizer/JobDescriptionForm";
 import { ActionButtons } from "@components/ats-optimizer/ActionButtons";

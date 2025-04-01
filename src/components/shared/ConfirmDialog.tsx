@@ -1,5 +1,5 @@
 import { AlertTriangle } from "lucide-react";
-import { Button } from "../Button";
+import { Button } from "@components/ui/Button";
 
 interface ConfirmDialogProps {
   title: string;

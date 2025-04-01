@@ -3,7 +3,7 @@ import { useAuth } from "../lib/AuthProvider";
 import { supabase } from "../lib/supabase";
 import { TrendingUp, Users, FileText, Star, MessageSquare, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/Button";
+import { Button } from "@components/ui/Button";
 import { useTrainingStore } from "@/lib/store/training";
 import { getCurrentSubscription } from "@/lib/revolut";
 import { SUBSCRIPTION_PLANS } from "@/lib/revolut/constants";

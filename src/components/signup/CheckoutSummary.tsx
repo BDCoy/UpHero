@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../Button";
+import { Button } from "@components/ui/Button";
 import { CreditCard, Shield, Clock } from "lucide-react";
 import { useRevolutCheckout } from "@/lib/RevolutCheckoutContext";
 import { SUBSCRIPTION_PLANS, SubscriptionPlan } from "@/lib/revolut";

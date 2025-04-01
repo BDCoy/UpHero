@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
-import { Button } from '../Button';
+import { Button } from '@components/ui/Button';
 import { supabase } from '@/lib/supabase';
 import { toast } from '@/lib/store';
 

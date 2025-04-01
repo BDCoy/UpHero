@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { STEPS } from './signup/SignUpSteps';
-import { Logo } from './Logo';
+import { Logo } from './ui/Logo';
 
 interface SignUpLayoutProps {
   children: React.ReactNode;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Button } from "../components/Button";
+import { Button } from "@components/ui/Button";
 import { ArrowLeft, CheckCircle, Eye, EyeOff } from "lucide-react";
 import { AuthLayout } from "../components/AuthLayout";
 import { supabase } from "../lib/supabase";

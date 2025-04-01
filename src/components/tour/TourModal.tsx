@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
-import { Button } from '../Button';
-import { useTourStore } from '@/lib/store/tour';
+import { useEffect, useRef } from "react";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { useTourStore } from "@/lib/store/tour";
 
 export function TourModal() {
-  const { isActive, currentStep, steps, nextStep, previousStep, skipTour } = useTourStore();
+  const { isActive, currentStep, steps, nextStep, previousStep, skipTour } =
+    useTourStore();
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,7 +14,7 @@ export function TourModal() {
       if (targetElement && modalRef.current) {
         const targetRect = targetElement.getBoundingClientRect();
         const modalRect = modalRef.current.getBoundingClientRect();
-        
+
         // Position the modal next to the target element
         let top = 20;
         let left = targetRect.right + 20; // 20px gap
@@ -30,10 +31,18 @@ export function TourModal() {
         modalRef.current.style.left = `${left}px`;
 
         // Highlight the target element
-        targetElement.classList.add('ring-2', 'ring-upwork-green', 'ring-offset-2');
+        targetElement.classList.add(
+          "ring-2",
+          "ring-upwork-green",
+          "ring-offset-2"
+        );
 
         return () => {
-          targetElement.classList.remove('ring-2', 'ring-upwork-green', 'ring-offset-2');
+          targetElement.classList.remove(
+            "ring-2",
+            "ring-upwork-green",
+            "ring-offset-2"
+          );
         };
       }
     }
@@ -70,9 +79,7 @@ export function TourModal() {
 
         {/* Content */}
         <div className="p-4">
-          <p className="text-upwork-gray-light">
-            {currentTourStep.content}
-          </p>
+          <p className="text-upwork-gray-light">{currentTourStep.content}</p>
         </div>
 
         {/* Footer */}
@@ -87,10 +94,10 @@ export function TourModal() {
               Back
             </Button>
             <Button
-              onClick={() => isLastStep ? skipTour() : nextStep()}
+              onClick={() => (isLastStep ? skipTour() : nextStep())}
               size="sm"
             >
-              {isLastStep ? 'Finish' : 'Next'}
+              {isLastStep ? "Finish" : "Next"}
             </Button>
           </div>
           <button

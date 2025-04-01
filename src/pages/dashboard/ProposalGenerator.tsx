@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@components/Button";
+import { Button } from "@components/ui/Button";
 import { RefreshCw } from "lucide-react";
 import { toast } from "@lib/store";
 import { useProposalStore } from "@lib/store/proposal";

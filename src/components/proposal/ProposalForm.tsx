@@ -1,6 +1,6 @@
 import React from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-import { Button } from '../Button';
+import { Button } from '@components/ui/Button';
 import type { ClientQuestion } from '@lib/store/proposal';
 
 const TONE_OPTIONS = [

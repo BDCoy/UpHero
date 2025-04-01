@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../lib/AuthProvider";
-import { Sidebar } from "./dashboard/Sidebar";
-import { Navbar } from "./dashboard/Navbar";
+import { useAuth } from "@lib/AuthProvider";
+import { Sidebar } from "../dashboard/Sidebar";
+import { Navbar } from "../dashboard/Navbar";
 import { Loader2 } from "lucide-react";
 import { checkUserStatus } from "@/lib/auth/authUtils";
-import { TourModal } from "./tour/TourModal";
+import { TourModal } from "../tour/TourModal";
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { signOut } = useAuth();

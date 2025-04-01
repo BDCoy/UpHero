@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, Bell, User, ChevronDown, Settings, LogOut } from 'lucide-react';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Menu, User, ChevronDown, Settings, LogOut } from "lucide-react";
 
 interface NavbarProps {
   onOpenSidebar: () => void;
@@ -39,7 +39,8 @@ export function Navbar({ onOpenSidebar, onSignOut }: NavbarProps) {
             <div className="h-8 w-8 rounded-full bg-upwork-background flex items-center justify-center">
               <User className="h-5 w-5" />
             </div>
-            <ChevronDown className="h-4 w-4" /> {/* Removed hidden md:block classes to show on mobile */}
+            <ChevronDown className="h-4 w-4" />{" "}
+            {/* Removed hidden md:block classes to show on mobile */}
           </button>
 
           {isProfileMenuOpen && (

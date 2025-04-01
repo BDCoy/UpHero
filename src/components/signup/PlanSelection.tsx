@@ -1,6 +1,6 @@
 import React from "react";
 import { FormikProps } from "formik";
-import { Button } from "../Button";
+import { Button } from "@components/ui/Button";
 import { SUBSCRIPTION_PLANS } from "@/lib/revolut/constants";
 import { Clock, Star } from "lucide-react";
 import { PLAN_IDS } from "@/lib/revolut";

@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@lib/AuthProvider';
 import { ProtectedRoute } from '@components/ProtectedRoute';
-import { Layout } from '@components/Layout';
-import { DashboardLayout } from '@components/DashboardLayout';
 import { ToastContainer } from '@components/Toast';
 
 // Public pages
@@ -25,6 +23,7 @@ import { ClientMessageResponse } from '@pages/dashboard/ClientMessageResponse';
 import { PersonalizedTraining } from '@pages/dashboard/PersonalizedTraining';
 import { Settings } from '@pages/dashboard/Settings';
 import { SubscriptionChange } from '@pages/dashboard/SubscriptionChange';
+import { DashboardLayout } from './components/dashboard/DashboardLayout';
 
 // Helper Component for Protected Routes
 const ProtectedDashboardRoute = ({ children }: { children: JSX.Element }) => (
@@ -57,9 +56,9 @@ function App() {
           <Route path="/dashboard/settings/subscription/upgrade" element={<ProtectedDashboardRoute><SubscriptionChange /></ProtectedDashboardRoute>} />
 
           {/* Public pages with Layout */}
-          <Route path="/" element={<Layout><LandingPage /></Layout>} />
-          <Route path="/privacy" element={<Layout><PrivacyPage /></Layout>} />
-          <Route path="/terms" element={<Layout><TermsPage /></Layout>} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
         </Routes>
         <ToastContainer />
       </Router>

@@ -1,4 +1,4 @@
-import { Button } from "../Button";
+import { Button } from "@components/ui/Button";
 import { Copy, MessageSquare } from "lucide-react";
 import { toast } from "@lib/store";
 

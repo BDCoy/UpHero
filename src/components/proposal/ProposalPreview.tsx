@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../Button';
+import { Button } from '@components/ui/Button';
 import { Copy, Clock, DollarSign, CheckCircle, Target } from 'lucide-react';
 import { toast } from '@lib/store';
 import type { ProposalResponse } from '@lib/store/proposal';

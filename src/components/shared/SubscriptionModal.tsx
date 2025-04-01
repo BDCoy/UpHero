@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "../Button";
+import { Button } from "@components/ui/Button";
 import { CreditCard, X } from "lucide-react";
 
 interface SubscriptionModalProps {

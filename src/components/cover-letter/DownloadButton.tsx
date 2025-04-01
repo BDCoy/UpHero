@@ -1,6 +1,6 @@
 import React from 'react';
 import { Download, Loader2 } from 'lucide-react';
-import { Button } from '../Button';
+import { Button } from '@components/ui/Button';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { CoverLetterPDF } from './CoverLetterPDF';
 import type { DownloadButtonProps } from './types';

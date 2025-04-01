@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+import { Button } from "@components/ui/Button";
 import { Loader2, CheckCircle, Circle } from "lucide-react";
 
 interface ModuleContentProps {

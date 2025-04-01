@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Logo } from "../Logo";
+import { Logo } from "../ui/Logo";
 import { Settings, LogOut, X } from "lucide-react";
 import { sidebarLinks } from "./navigation";
 import { useTourStore } from "@/lib/store/tour";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@components/Button";
+import { Button } from "@components/ui/Button";
 import { toast } from "@lib/store";
 import { useProfileAnalysisStore } from "@lib/store/profile-analysis";
 import { RefreshCw } from "lucide-react";

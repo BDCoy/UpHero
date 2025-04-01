@@ -1,6 +1,5 @@
-import React from 'react';
-import { Button } from '@components/Button';
-import { Loader2 } from 'lucide-react';
+import { Button } from "@components/ui/Button";
+import { Loader2 } from "lucide-react";
 
 interface ProfileFormProps {
   fullName: string;
@@ -21,7 +20,7 @@ export function ProfileForm({
   onFullNameChange,
   onHeadlineChange,
   onDescriptionChange,
-  onAnalyze
+  onAnalyze,
 }: ProfileFormProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
@@ -71,7 +70,12 @@ export function ProfileForm({
 
       <Button
         onClick={onAnalyze}
-        disabled={isAnalyzing || !fullName.trim() || !currentHeadline.trim() || !currentDescription.trim()}
+        disabled={
+          isAnalyzing ||
+          !fullName.trim() ||
+          !currentHeadline.trim() ||
+          !currentDescription.trim()
+        }
         className="mt-6 w-full"
       >
         {isAnalyzing ? (
@@ -80,7 +84,7 @@ export function ProfileForm({
             Analyzing Profile...
           </>
         ) : (
-          'Analyze Profile'
+          "Analyze Profile"
         )}
       </Button>
     </div>

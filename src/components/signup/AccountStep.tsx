@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useFormik } from "formik";
-import { Button } from "../Button";
+import { Button } from "@components/ui/Button";
 import { SignupFormData, signupValidationSchemas } from "../../lib/validation";
 import { Eye, EyeOff } from "lucide-react";
 
