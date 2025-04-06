@@ -42,3 +42,17 @@
 .animate-in {
   animation: slide-in-from-right-5 0.3s ease-out;
 }
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}

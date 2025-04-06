@@ -26,30 +26,30 @@ export const Testimonials = () => {
       image: "https://randomuser.me/api/portraits/women/44.jpg",
       stars: 5,
     },
-    {
-      quote:
-        "As a non-native English speaker, UpHero has been invaluable for crafting professional-sounding proposals. The client message templates also help me communicate clearly.",
-      author: "Miguel R.",
-      role: "UI/UX Designer",
-      image: "https://randomuser.me/api/portraits/men/67.jpg",
-      stars: 4,
-    },
-    {
-      quote:
-        "UpHero has simplified the proposal process for me. I now know exactly what to include, and my clients appreciate the professionalism.",
-      author: "Alex T.",
-      role: "Web Designer",
-      image: "https://randomuser.me/api/portraits/men/35.jpg",
-      stars: 5,
-    },
-    {
-      quote:
-        "I highly recommend UpHero to any freelancer looking to improve their proposals. The AI tools are powerful, and I've already noticed more success in landing jobs.",
-      author: "Emily L.",
-      role: "Copywriter",
-      image: "https://randomuser.me/api/portraits/women/56.jpg",
-      stars: 5,
-    },
+    // {
+    //   quote:
+    //     "As a non-native English speaker, UpHero has been invaluable for crafting professional-sounding proposals. The client message templates also help me communicate clearly.",
+    //   author: "Miguel R.",
+    //   role: "UI/UX Designer",
+    //   image: "https://randomuser.me/api/portraits/men/67.jpg",
+    //   stars: 4,
+    // },
+    // {
+    //   quote:
+    //     "UpHero has simplified the proposal process for me. I now know exactly what to include, and my clients appreciate the professionalism.",
+    //   author: "Alex T.",
+    //   role: "Web Designer",
+    //   image: "https://randomuser.me/api/portraits/men/35.jpg",
+    //   stars: 5,
+    // },
+    // {
+    //   quote:
+    //     "I highly recommend UpHero to any freelancer looking to improve their proposals. The AI tools are powerful, and I've already noticed more success in landing jobs.",
+    //   author: "Emily L.",
+    //   role: "Copywriter",
+    //   image: "https://randomuser.me/api/portraits/women/56.jpg",
+    //   stars: 5,
+    // },
   ];
 
   return (

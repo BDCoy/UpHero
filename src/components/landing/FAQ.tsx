@@ -10,7 +10,7 @@ import {
       {
         question: "Is UpHero free?",
         answer:
-          "Yes, UpHero offers a free plan with essential features. After the 3-day trial, your subscription will automatically renew with the Freelancer Plan.",
+          "Yes, UpHero offers a free plan with essential features. After the 3-day trial, your subscription will automatically renew with the Freelancer Plan unless you cancel.",
       },
       {
         question: "How does the Proposal Generator work?",
