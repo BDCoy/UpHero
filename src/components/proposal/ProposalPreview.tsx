@@ -40,7 +40,7 @@ export function ProposalPreview({ proposal }: ProposalPreviewProps) {
       </div>
 
       {/* Project Plan Section */}
-      {proposal.projectPlan && (
+      {/* {proposal.projectPlan && (
         <div className="p-6">
           <h2 className="text-lg font-semibold text-upwork-gray mb-4">Project Plan</h2>
           <div className="space-y-6">
@@ -74,7 +74,7 @@ export function ProposalPreview({ proposal }: ProposalPreviewProps) {
             ))}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Question Responses Section */}
       {proposal?.questionResponses?.length > 0 && (
@@ -92,7 +92,7 @@ export function ProposalPreview({ proposal }: ProposalPreviewProps) {
       )}
 
       {/* Project Details Section */}
-      <div className="p-6">
+      {/* <div className="p-6">
         <h2 className="text-lg font-semibold text-upwork-gray mb-4">Project Details</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -139,7 +139,7 @@ export function ProposalPreview({ proposal }: ProposalPreviewProps) {
             </ul>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

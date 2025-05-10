@@ -1,42 +1,52 @@
 import { useState } from "react";
-import { Button } from "@components/ui/Button";
 import { toast } from "@lib/store";
 import { useProfileAnalysisStore } from "@lib/store/profile-analysis";
-import { RefreshCw } from "lucide-react";
-import { ProfileForm } from "@components/profile-analysis/ProfileForm";
-import { EmptyState } from "@components/profile-analysis/EmptyState";
-import { OptimizedContent } from "@components/profile-analysis/OptimizedContent";
-import { Recommendations } from "@components/profile-analysis/Recommendations";
-import { KeywordsList } from "@components/profile-analysis/KeywordsList";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthProvider";
 import { analyzeUpworkProfile } from "@/lib/openai/profile-analysis";
 import { checkSubscriptionStatus } from "@/lib/auth/authUtils";
 import { SubscriptionModal } from "@/components/shared/SubscriptionModal";
+import { PreviewSection } from "@/components/profile-analysis/PreviewSection";
+import { ManualAnalysisForm } from "@/components/profile-analysis/ManualAnalysisForm";
+import { UrlAnalysisForm } from "@/components/profile-analysis/UrlAnalysisForm";
+import { TabNavigation } from "@/components/profile-analysis/TabNavigation";
+import { AnalysisHeader } from "@/components/profile-analysis/AnalysisHeader";
+
+interface FreelancerData {
+  Name: string;
+  Headline: string;
+  Body: string;
+  ProfileImageSrc: string;
+  HourlyRate: string;
+  TotalJobs: number;
+  Country: string;
+  TotalHours: number;
+  ProfileURL: string;
+}
 
 export function ProfileAnalysis() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<"url" | "manual">("url");
+  const [profileUrl, setProfileUrl] = useState("");
+  const [profileData, setProfileData] = useState<FreelancerData | null>(null);
+  const [showResults, setShowResults] = useState(false);
   const { user } = useAuth();
+
   const {
     fullName,
     currentHeadline,
     currentDescription,
     analysis,
-    setFullName,
     setCurrentHeadline,
     setCurrentDescription,
     setAnalysis,
     reset,
   } = useProfileAnalysisStore();
 
-  const handleAnalyze = async () => {
-    if (!fullName.trim()) {
-      toast.error("Please enter your full name");
-      return;
-    }
-    if (!currentHeadline.trim() || !currentDescription.trim()) {
-      toast.error("Please provide both headline and description");
+  const handleUrlAnalysis = async () => {
+    if (!profileUrl.trim()) {
+      toast.error("Please enter your Upwork profile URL");
       return;
     }
 
@@ -44,7 +54,6 @@ export function ProfileAnalysis() {
       throw Error("Please signin to continue");
     }
 
-    // Check subscription status
     const isSubscriptionValid = await checkSubscriptionStatus(
       user.id,
       "profile_analysis_count"
@@ -56,8 +65,43 @@ export function ProfileAnalysis() {
 
     try {
       setIsAnalyzing(true);
+      const { data, error } = await supabase.functions.invoke(
+        "profile-analysis",
+        { body: { url: profileUrl } }
+      );
+      if (error) throw error;
+      const tmp = JSON.parse(data);
+      setProfileData(tmp);
+      setShowResults(false);
+    } catch (error) {
+      console.error("Error analyzing profile:", error);
+      toast.error("Failed to analyze profile URL");
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
-      // Perform the profile analysis
+  const handleManualAnalysis = async () => {
+    if (!currentHeadline.trim() || !currentDescription.trim()) {
+      toast.error("Please provide both headline and description");
+      return;
+    }
+
+    if (!user) {
+      throw Error("Please signin to continue");
+    }
+
+    const isSubscriptionValid = await checkSubscriptionStatus(
+      user.id,
+      "profile_analysis_count"
+    );
+    if (!isSubscriptionValid) {
+      setShowSubscriptionModal(true);
+      return;
+    }
+
+    try {
+      setIsAnalyzing(true);
       const result = await analyzeUpworkProfile(
         currentHeadline,
         currentDescription,
@@ -65,33 +109,28 @@ export function ProfileAnalysis() {
       );
       setAnalysis(result);
 
-      toast.success("Profile analysis completed successfully!");
-
+      // Update usage count for manual analysis
       const { data, error: fetchError } = await supabase
         .from("profiles")
         .select("profile_analysis_count")
         .eq("id", user?.id)
         .single();
-
       if (fetchError) {
         console.error("Error fetching current count:", fetchError);
         return;
       }
 
       const newCount = (data?.profile_analysis_count || 0) + 1;
-      // Call the Supabase Edge Function to update the profile count
-
       const { error } = await supabase.functions.invoke(
-        "update-profile-count", // Name of the edge function
+        "update-profile-count",
         {
           body: {
-            analysisType: "profile_analysis_count", // Specify the analysis type
-            user_id: user.id, // Pass the user_id to the Edge Function
-            new_count: newCount, // Pass the new count
+            analysisType: "profile_analysis_count",
+            user_id: user.id,
+            new_count: newCount,
           },
         }
       );
-
       if (error) {
         console.error("Error invoking edge function:", error);
         return;
@@ -104,71 +143,80 @@ export function ProfileAnalysis() {
     }
   };
 
+  const handleViewResults = async () => {
+    if (!profileData) return;
+    try {
+      setIsAnalyzing(true);
+      const result = await analyzeUpworkProfile(
+        profileData.Headline,
+        profileData.Body,
+        profileData.Name
+      );
+      setAnalysis(result);
+      setShowResults(true);
+
+      // Update usage count for URL analysis
+      if (user) {
+        const { data, error: fetchError } = await supabase
+          .from("profiles")
+          .select("profile_analysis_count")
+          .eq("id", user.id)
+          .single();
+        if (fetchError) {
+          console.error("Error fetching current count:", fetchError);
+          return;
+        }
+        const newCount = (data?.profile_analysis_count || 0) + 1;
+        await supabase.functions.invoke("update-profile-count", {
+          body: {
+            analysisType: "profile_analysis_count",
+            user_id: user.id,
+            new_count: newCount,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error analyzing profile data:", error);
+      toast.error("Failed to analyze profile data");
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-upwork-gray">
-            Profile Analysis
-          </h1>
-          <p className="mt-1 text-sm text-upwork-gray-light">
-            Optimize your Upwork profile with AI-powered recommendations
-          </p>
-        </div>
-        {analysis && (
-          <Button
-            variant="outline"
-            onClick={reset}
-            className="flex items-center gap-2 w-full sm:w-auto justify-center"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Start New Analysis
-          </Button>
-        )}
-      </div>
+      <AnalysisHeader analysis={analysis} reset={reset} />
+      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Form Section */}
         <div>
-          <ProfileForm
-            fullName={fullName}
-            currentHeadline={currentHeadline}
-            currentDescription={currentDescription}
-            isAnalyzing={isAnalyzing}
-            onFullNameChange={setFullName}
-            onHeadlineChange={setCurrentHeadline}
-            onDescriptionChange={setCurrentDescription}
-            onAnalyze={handleAnalyze}
-          />
-        </div>
-
-        {/* Preview Section - Fixed height and scrollable */}
-        <div className="h-[calc(100vh-12rem)] sticky top-24">
-          {analysis ? (
-            <div className="h-full overflow-y-auto space-y-6">
-              <OptimizedContent analysis={analysis} />
-              <Recommendations recommendations={analysis.recommendations} />
-              <KeywordsList
-                title="Keyword Suggestions"
-                items={analysis.keywordSuggestions}
-              />
-              <KeywordsList
-                title="Skills to Highlight"
-                items={analysis.skillHighlights}
-                variant="highlight"
-              />
-            </div>
+          {activeTab === "url" ? (
+            <UrlAnalysisForm
+              profileUrl={profileUrl}
+              setProfileUrl={setProfileUrl}
+              isAnalyzing={isAnalyzing}
+              handleUrlAnalysis={handleUrlAnalysis}
+              profileData={profileData}
+              showResults={showResults}
+              handleViewResults={handleViewResults}
+            />
           ) : (
-            <div className="bg-white rounded-lg shadow-sm p-6 h-full">
-              <EmptyState />
-            </div>
+            <ManualAnalysisForm
+              currentHeadline={currentHeadline}
+              setCurrentHeadline={setCurrentHeadline}
+              currentDescription={currentDescription}
+              setCurrentDescription={setCurrentDescription}
+              isAnalyzing={isAnalyzing}
+              handleManualAnalysis={handleManualAnalysis}
+            />
           )}
         </div>
+
+        <div className="h-[calc(100vh-12rem)] sticky top-24">
+          {analysis && <PreviewSection analysis={analysis} />}
+        </div>
       </div>
 
-      {/* Subscription Modal */}
       <SubscriptionModal
         isOpen={showSubscriptionModal}
         onClose={() => setShowSubscriptionModal(false)}
