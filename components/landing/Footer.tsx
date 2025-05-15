@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
         {/* Brand + Social */}
         <div className="space-y-4 text-center md:text-left">
           <Link href="/" className="inline-flex items-center gap-2" aria-label="Go to homepage">
-            <Image src="/sensei_logo.svg" alt="UGC Sensei" width={32} height={32} className="h-8 w-auto" />
+            <Image src="/sensei_logo.svg" alt="Sensei" width={32} height={32} className="h-8 w-auto" />
           </Link>
 
           <nav className="flex flex-wrap justify-center md:justify-start gap-4">
@@ -101,7 +101,7 @@ const Footer: React.FC = () => {
           </nav>
 
           <p className="text-xs text-gray-500">
-            © {year} UGC Sensei. All rights reserved.
+            © {year} Sensei. All rights reserved.
           </p>
         </div>
         

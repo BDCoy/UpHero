@@ -1,4 +1,4 @@
-import Link from "next/link";
+
 import Navbar from '@/components/landing/Navbar';
 import Hero from '@/components/landing/Hero';
 import Features from '@/components/landing/Features';
@@ -12,16 +12,26 @@ import Footer from '@/components/landing/Footer';
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen scroll-smooth">
       <Navbar />
-      <main className="flex-grow page-transition">
+      <main className="flex-grow">
         <div className="min-h-screen bg-[#f7f8fa] text-[#42354e] font-sans">
-          <Hero />
-          <Features />
-          <CreatorShowcase />
-          <ComparisonSection />
+          <section id="home">
+            <Hero />
+          </section>
+          <section id="features">
+            <Features />
+          </section>
+          <section id="creators">
+            <CreatorShowcase />
+          </section>
+          <section id="services">
+            <ComparisonSection />
+          </section>
           <BusinessCards />
-          <Testimonials />
+          <section id="success">
+            <Testimonials />
+          </section>
           <HowItWorks />
           <DemoScheduler />
         </div>

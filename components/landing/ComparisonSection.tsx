@@ -47,14 +47,14 @@ const ComparisonSection: React.FC = () => {
   return (
     <section className="bg-white py-14 border-b border-[#e5e6ea]">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold text-center mb-8 text-[#42354e]">Why UGC Sensei?</h2>
-        <p className="text-center mb-12 text-lg">See why UGC Sensei is the smarter choice for high-performing videos.</p>
+        <h2 className="text-2xl font-bold text-center mb-8 text-[#42354e]">Why Sensei?</h2>
+        <p className="text-center mb-12 text-lg">See why Sensei is the smarter choice for high-performing videos.</p>
         <div className="overflow-x-auto">
           <table className="min-w-[740px] mx-auto w-full bg-[#f7f8fa] rounded-2xl shadow-sm">
             <thead>
               <tr className="text-left text-[#42354e] text-base border-b border-[#e5e6ea]">
                 <th className="p-4 font-semibold"> </th>
-                <th className="p-4 font-semibold text-[#5b21b6]">UGC Sensei</th>
+                <th className="p-4 font-semibold text-[#5b21b6]">Sensei</th>
                 <th className="p-4 font-semibold">Influencers</th>
                 <th className="p-4 font-semibold">Production studio</th>
               </tr>
@@ -87,7 +87,7 @@ const ComparisonSection: React.FC = () => {
         </div>
         <div className="flex justify-center mt-8">
           <a href="#try-now" className="inline-block bg-[#5b21b6] hover:bg-[#9b6074] text-white font-semibold px-7 py-3 rounded-full text-base shadow transition-colors">
-            Try UGC Sensei now
+            Try Sensei now
           </a>
         </div>
       </div>

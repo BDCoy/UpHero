@@ -18,7 +18,7 @@ export default function Card({ title, description, footer, children }: Props) {
             <Link href="/">
               <Image
                 src="/sensei_logo.svg"
-                alt="UGC Sensei"
+                alt="Sensei"
                 width={128}
                 height={128}
                 className="mx-auto mb-6 sm:mb-8"
@@ -86,7 +86,7 @@ export default function Card({ title, description, footer, children }: Props) {
           <a href="mailto:support@ugcsensei.com" className="hover:underline">
             support@ugcsensei.com
           </a>
-          <span>| © 2025 UGC Sensei. All Rights Reserved.</span>
+          <span>| © 2025 Sensei. All Rights Reserved.</span>
         </div>
       </footer>
     </div>
