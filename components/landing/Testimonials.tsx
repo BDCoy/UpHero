@@ -1,122 +1,114 @@
-import React from "react";
+/* eslint-disable @next/next/no-img-element */
 import { Star } from "lucide-react";
 
-const testimonials = [
-  {
-    brand: "Intelligence Media",
-    quote:
-      "We immediately published the first ad variations with Sensei's recommended structure, we didn't edit anything, and it already worked better than our previous ads. Our ROAS was better and acquisition costs went down. We were able to scale larger because of that.",
-    author: "Jorens, CEO",
-    stats: ["+120% increase in sales", "+200% boost in net profit"],
-    logo: "https://ext.same-assets.com/2921571504/2764260946.svg",
-    image: "https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg",
-    caseLink: "#intelligence-media",
-  },
-  {
-    brand: "Bickster",
-    quote:
-      "Sensei's been great for us! I've had clients in the past that don't have any video and they're expecting something fast. I'm not a video producer, but I can tap Sensei and get 10 videos for a grand and now we've got our starting toolkit.",
-    author: "Pat, Head of Growth",
-    stats: ["+500% CPI drop", "+2.5x lower CPA"],
-    logo: "https://ext.same-assets.com/2921571504/2764260946.svg",
-    image: "https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg",
-    caseLink: "#bickster",
-  },
-  {
-    brand: "Adore Me",
-    quote:
-      "Sensei creators perform really well in general. Over the past several years, many of our top ads on TikTok have been from Sensei instead of the influencers we discover ourselves. We're impressed by the high-quality content from Sensei creators.",
-    author: "Kayla, Marketing Associate",
-    stats: ["+15% higher CTR", "+8% lower CPA"],
-    logo: "https://ext.same-assets.com/2921571504/2764260946.svg",
-    image: "https://images.pexels.com/photos/3184603/pexels-photo-3184603.jpeg",
-    caseLink: "#adore-me",
-  },
-  {
-    brand: "Pineapple Products",
-    quote:
-      "Presenting real, everyday people to our customers has made a huge difference. The amount of people interacting with us and looking to purchase our product from these videos has gone up from somewhere between 30% and 50% in the past couple months.",
-    author: "Shaun, Brand Reputation Manager",
-    stats: ["+10.75% ROI", "+5% conversion rates"],
-    logo: "https://ext.same-assets.com/2921571504/2764260946.svg",
-    image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
-    caseLink: "#pineapple",
-  },
-];
+export const Testimonials = () => {
+  const testimonials = [
+    {
+      quote:
+        "UpHero transformed how I write proposals. It saved me hours and helped me win more jobs. The profile analysis feature alone was worth the investment.",
+      author: "Jane D.",
+      role: "Graphic Designer",
+      image: "https://randomuser.me/api/portraits/women/12.jpg",
+      stars: 5,
+    },
+    {
+      quote:
+        "The ATS feature alone is worth it. My proposals now stand out to clients, and I've seen a 40% increase in interview invitations since I started using UpHero.",
+      author: "John M.",
+      role: "Web Developer",
+      image: "https://randomuser.me/api/portraits/men/32.jpg",
+      stars: 5,
+    },
+    {
+      quote:
+        "I was skeptical at first, but after using UpHero for just one month, I landed two long-term clients. The proposal templates are professional and easy to customize.",
+      author: "Sarah K.",
+      role: "Content Writer",
+      image: "https://randomuser.me/api/portraits/women/44.jpg",
+      stars: 5,
+    },
+    // {
+    //   quote:
+    //     "As a non-native English speaker, UpHero has been invaluable for crafting professional-sounding proposals. The client message templates also help me communicate clearly.",
+    //   author: "Miguel R.",
+    //   role: "UI/UX Designer",
+    //   image: "https://randomuser.me/api/portraits/men/67.jpg",
+    //   stars: 4,
+    // },
+    // {
+    //   quote:
+    //     "UpHero has simplified the proposal process for me. I now know exactly what to include, and my clients appreciate the professionalism.",
+    //   author: "Alex T.",
+    //   role: "Web Designer",
+    //   image: "https://randomuser.me/api/portraits/men/35.jpg",
+    //   stars: 5,
+    // },
+    // {
+    //   quote:
+    //     "I highly recommend UpHero to any freelancer looking to improve their proposals. The AI tools are powerful, and I've already noticed more success in landing jobs.",
+    //   author: "Emily L.",
+    //   role: "Copywriter",
+    //   image: "https://randomuser.me/api/portraits/women/56.jpg",
+    //   stars: 5,
+    // },
+  ];
 
-const Testimonials: React.FC = () => {
   return (
-    <section className="bg-white py-20 border-b border-[#e5e6ea]">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-[#42354e]">
-          See how brands are winning with Sensei
-        </h2>
-        <p className="text-center text-[#6f6290] mb-16 max-w-2xl mx-auto">
-          Join thousands of successful brands who have transformed their social
-          media presence with authentic creator content
-        </p>
+    <section className="py-12 sm:py-16 lg:py-24 bg-white" id="testimonials">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-16">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-upwork-gray">
+            What Freelancers Are Saying
+          </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {testimonials.map((t, idx) => (
+          <p className="mt-4 text-lg sm:text-xl text-upwork-gray-light max-w-3xl mx-auto">
+            Don&apos;t just take our word for it. Here&apos;s what freelancers like you
+            have to say about UpHero.
+          </p>
+        </div>
+
+        <div className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          {testimonials.map((testimonial, index) => (
             <div
-              key={t.brand}
-              className="bg-[#f7f8fa] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              key={index}
+              className="relative group flex flex-col h-full"
             >
-              <div className="relative mb-6">
-                <img
-                  src={t.image}
-                  alt={t.brand}
-                  className="w-full h-48 object-cover rounded-lg"
-                />
-                <img
-                  src={t.logo}
-                  alt={`${t.brand} logo`}
-                  className="absolute -bottom-4 left-4 h-8 bg-white rounded-full p-1 shadow-md"
-                />
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-lg text-[#42354e]">
-                    {t.brand}
-                  </h3>
-                  <div className="flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className="w-4 h-4 fill-[#5b21b6] text-[#5b21b6]"
-                      />
-                    ))}
-                  </div>
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-upwork-green to-upwork-green-light rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-200" />
+              <div className="relative bg-white p-6 sm:p-8 rounded-lg shadow-lg ring-1 ring-gray-100/50 flex flex-col h-full">
+                <div className="flex items-center mb-4">
+                  {[...Array(testimonial.stars)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="h-5 w-5 fill-upwork-blue text-upwork-green"
+                    />
+                  ))}
+                  {[...Array(5 - testimonial.stars)].map((_, i) => (
+                    <Star
+                      key={i + testimonial.stars}
+                      className="h-5 w-5 text-upwork-gray-lighter"
+                    />
+                  ))}
                 </div>
 
-                <blockquote className="text-sm text-[#6f6290] italic">
-                  "{t.quote}"
+                <blockquote className="text-left mb-6 italic text-upwork-gray-light leading-relaxed text-base sm:text-lg">
+                  &quot;{testimonial.quote}&quot;
                 </blockquote>
 
-                <div className="pt-4 border-t border-[#e5e6ea]">
-                  <p className="text-sm font-medium text-[#42354e] mb-2">
-                    {t.author}
-                  </p>
-                  <ul className="space-y-1">
-                    {t.stats.map((stat, i) => (
-                      <li
-                        key={i}
-                        className="text-xs font-semibold text-[#5b21b6] flex items-center gap-1"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#5b21b6]"></span>
-                        {stat}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="flex items-center mt-auto">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.author}
+                    className="h-16 w-16 sm:h-20 sm:w-20 rounded-full mr-4 object-cover"
+                  />
+                  <div className="text-left">
+                    <p className="font-semibold text-upwork-gray text-sm sm:text-lg">
+                      {testimonial.author}
+                    </p>
+                    <p className="text-sm sm:text-base text-upwork-gray-light">
+                      {testimonial.role}
+                    </p>
+                  </div>
                 </div>
-
-                <a
-                  href={t.caseLink}
-                  className="inline-block text-sm text-[#5b21b6] hover:text-[#4a1d96] font-medium mt-4 hover:underline"
-                >
-                  Read full case study →
-                </a>
               </div>
             </div>
           ))}
@@ -125,5 +117,3 @@ const Testimonials: React.FC = () => {
     </section>
   );
 };
-
-export default Testimonials;

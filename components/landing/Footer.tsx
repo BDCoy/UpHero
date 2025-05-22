@@ -1,113 +1,97 @@
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { CircleUser } from 'lucide-react';
+import Link from "next/link";
 
-interface LinkItem {
-  href: string;
-  label: string;
-  ariaLabel?: string;
-  Icon?: React.ReactNode;
+interface Props {
+  scrollToSection: (sectionId: string) => void;
 }
-
-const socialLinks: LinkItem[] = [
-  { href: '#tiktok', label: 'TikTok' },
-  { href: '#facebook', label: 'Facebook' },
-  { href: '#instagram', label: 'Instagram' },
-  { href: '#other', label: 'Other' },
-];
-
-const storeLinks: LinkItem[] = [
-  {
-    href: '#appstore',
-    label: 'App Store',
-    Icon: <Image src="https://ext.same-assets.com/2921571504/3018777734.svg"
-               alt="Download on the App Store"
-               width={24}
-               height={24}
-               className="h-6"
-            />,
-  },
-  {
-    href: '#playstore',
-    label: 'Play Store',
-    Icon: <Image src="https://ext.same-assets.com/2921571504/4065543851.svg"
-               alt="Get it on Google Play"
-               width={24}
-               height={24}
-               className="h-6"
-            />,
-  },
-];
-
-const legalLinks: LinkItem[] = [
-  { href: '#terms',  label: 'Terms of Service' },
-  { href: '#privacy',label: 'Privacy Policy' },
-  { href: '#refund', label: 'Refund Policy' },
-  { href: '#cookie', label: 'Cookie Policy' },
-];
-
-const Footer: React.FC = () => {
-  const year = new Date().getFullYear();
-
+export const Footer: React.FC<Props> = ({ scrollToSection }) => {
   return (
-    <footer className="bg-white text-gray-600 animate-fade">
-      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        {/* Brand + Social */}
-        <div className="space-y-4 text-center md:text-left">
-          <Link href="/" className="inline-flex items-center gap-2" aria-label="Go to homepage">
-            <Image src="/sensei_logo.svg" alt="Sensei" width={32} height={32} className="h-8 w-auto" />
-          </Link>
-
-          <nav className="flex flex-wrap justify-center md:justify-start gap-4">
-            {socialLinks.map(({ href, label }) => (
-              <a
-                key={label}
-                href={href}
-                className="text-sm hover:text-[#5b21b6] transition-colors hover:scale-105 transform duration-200"
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex justify-center md:justify-start gap-4">
-            {storeLinks.map(({ href, Icon, label }) => (
-              <a 
-                key={label} 
-                href={href} 
-                aria-label={label}
-                className="hover:scale-105 transform duration-200"
-              >
-                {Icon}
-              </a>
-            ))}
+    <footer className="bg-upwork-gray">
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div>
+            <h4 className="text-sm font-semibold text-upwork-gray-lighter uppercase tracking-wider">
+              Product
+            </h4>
+            <ul className="mt-4 space-y-4">
+              <li>
+                <button
+                  onClick={() => scrollToSection("features")}
+                  className="text-base text-upwork-gray-light hover:text-white transition-colors"
+                >
+                  Features
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection("pricing")}
+                  className="text-base text-upwork-gray-light hover:text-white transition-colors"
+                >
+                  Pricing
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection("testimonials")}
+                  className="text-base text-upwork-gray-light hover:text-white transition-colors"
+                >
+                  Testimonials
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold text-upwork-gray-lighter uppercase tracking-wider">
+              Company
+            </h4>
+            <ul className="mt-4 space-y-4">
+              <li>
+                <button
+                  onClick={() => scrollToSection("about")}
+                  className="text-base text-upwork-gray-light hover:text-white transition-colors"
+                >
+                  About
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection("faq")}
+                  className="text-base text-upwork-gray-light hover:text-white transition-colors"
+                >
+                  FAQ
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold text-upwork-gray-lighter uppercase tracking-wider">
+              Legal
+            </h4>
+            <ul className="mt-4 space-y-4">
+              <li>
+                <Link href="/privacy"
+                  className="text-base text-upwork-gray-light hover:text-white transition-colors"
+                >
+                  Privacy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms"
+                  className="text-base text-upwork-gray-light hover:text-white transition-colors"
+                >
+                  Terms
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
-
-        {/* Legal + Copyright */}
-        <div className="space-y-4 text-center md:text-right">
-          <nav className="flex flex-wrap justify-center md:justify-end gap-6 text-xs">
-            {legalLinks.map(({ href, label }) => (
-              <a
-                key={label}
-                href={href}
-                className="hover:text-[#5b21b6] transition-colors hover:scale-105 transform duration-200"
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
-
-          <p className="text-xs text-gray-500">
-            © {year} Sensei. All rights reserved.
-          </p>
+        <div className="mt-8 border-t border-upwork-gray-lighter/20 pt-8 md:flex md:items-center md:justify-between">
+          <div className="flex space-x-6 md:order-2">
+            <p className="text-base text-upwork-gray-light">
+              © 2025 UpHero. All rights reserved.
+            </p>
+          </div>
         </div>
-        
       </div>
     </footer>
   );
 };
-
-export default Footer;

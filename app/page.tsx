@@ -1,42 +1,38 @@
-
-import Navbar from '@/components/landing/Navbar';
-import Hero from '@/components/landing/Hero';
-import Features from '@/components/landing/Features';
-import CreatorShowcase from '@/components/landing/CreatorShowcase';
-import ComparisonSection from '@/components/landing/ComparisonSection';
-import BusinessCards from '@/components/landing/BusinessCards';
-import Testimonials from '@/components/landing/Testimonials';
-import HowItWorks from '@/components/landing/HowItWorks';
-import DemoScheduler from '@/components/landing/DemoScheduler';
-import Footer from '@/components/landing/Footer';
+import { Pircing } from "@/components/landing/Pircing";
+import { About } from "@/components/landing/About";
+import { CTASection } from "@/components/landing/CTASection";
+import { Testimonials } from "@/components/landing/Testimonials";
+import { Features } from "@/components/landing/Features";
+import { Stats } from "@/components/landing/Stats";
+import { HeroSection } from "@/components/landing/HeroSection";
+import { FAQ } from "@/components/landing/FAQ";
+import { Layout } from "@/components/landing/Layout";
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen scroll-smooth">
-      <Navbar />
-      <main className="flex-grow">
-        <div className="min-h-screen bg-[#f7f8fa] text-[#42354e] font-sans">
-          <section id="home">
-            <Hero />
-          </section>
-          <section id="features">
-            <Features />
-          </section>
-          <section id="creators">
-            <CreatorShowcase />
-          </section>
-          <section id="services">
-            <ComparisonSection />
-          </section>
-          <BusinessCards />
-          <section id="success">
-            <Testimonials />
-          </section>
-          <HowItWorks />
-          <DemoScheduler />
-        </div>
-      </main>
-      <Footer />
-    </div>
+    <Layout>
+      {/* Hero Section */}
+      <HeroSection />
+
+      {/* Stats Section */}
+      <Stats />
+
+      {/* Features Section */}
+      <Features />
+
+      {/* Pricing Section */}
+      <Pircing />
+
+      {/* Testimonials */}
+      <Testimonials />
+
+      {/* About Section */}
+      <About />
+
+      {/* FAQ Section */}
+      <FAQ />
+      {/* CTA Section */}
+      <CTASection />
+    </Layout>
   );
 }

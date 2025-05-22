@@ -5,12 +5,13 @@ interface SeparatorProps {
 export default function Separator({ text }: SeparatorProps) {
   return (
     <div className="relative">
-      <div className="relative flex items-center py-1">
-        <div className="grow border-t border-zinc-700"></div>
-        <span className="mx-3 shrink text-sm leading-8 text-zinc-500">
+      <div className="absolute inset-0 flex items-center">
+        <div className="w-full border-t border-upwork-gray-lighter" />
+      </div>
+      <div className="relative flex justify-center text-sm">
+        <span className="px-2 bg-white text-upwork-gray-light">
           {text}
         </span>
-        <div className="grow border-t border-zinc-700"></div>
       </div>
     </div>
   );

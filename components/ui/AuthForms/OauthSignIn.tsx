@@ -1,10 +1,9 @@
 "use client";
 
-import Button from "@/components/ui/Button/Button";
 import { signInWithOAuth } from "@/utils/auth-helpers/client";
 import { type Provider } from "@supabase/supabase-js";
-import { Github } from "lucide-react";
 import { useState } from "react";
+import { Button } from "../Button";
 
 type OAuthProviders = {
   name: Provider;
@@ -14,14 +13,9 @@ type OAuthProviders = {
 
 export default function OauthSignIn() {
   const oAuthProviders: OAuthProviders[] = [
-    // {
-    //   name: 'github',
-    //   displayName: 'GitHub',
-    //   icon: <Github className="h-5 w-5" />
-    // },
     {
       name: "google",
-      displayName: "Google",
+      displayName: "Sign in with Google",
       icon: (
         <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
           <path
@@ -42,7 +36,7 @@ export default function OauthSignIn() {
   };
 
   return (
-    <div className="mt-8">
+    <div className="mt-6">
       {oAuthProviders.map((provider) => (
         <form
           key={provider.name}
@@ -51,10 +45,10 @@ export default function OauthSignIn() {
         >
           <input type="hidden" name="provider" value={provider.name} />
           <Button
-            variant="slim"
+            variant="outline"
             type="submit"
-            className="w-full"
             loading={isSubmitting}
+            className="w-full"
           >
             <span className="mr-2">{provider.icon}</span>
             <span>{provider.displayName}</span>

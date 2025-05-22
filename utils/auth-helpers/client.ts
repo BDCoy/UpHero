@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { createClient } from '@/utils/supabase/client';
-import { type Provider } from '@supabase/supabase-js';
-import { getURL } from '@/utils/helpers';
-import { redirectToPath } from './server';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { createClient } from "@/utils/supabase/client";
+import { type Provider } from "@supabase/supabase-js";
+import { getURL } from "@/utils/helpers";
+import { redirectToPath } from "./server";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export async function handleRequest(
   e: React.FormEvent<HTMLFormElement>,
@@ -30,15 +30,49 @@ export async function signInWithOAuth(e: React.FormEvent<HTMLFormElement>) {
   // Prevent default form submission refresh
   e.preventDefault();
   const formData = new FormData(e.currentTarget);
-  const provider = String(formData.get('provider')).trim() as Provider;
+  const provider = String(formData.get("provider")).trim() as Provider;
 
   // Create client-side supabase client and call signInWithOAuth
   const supabase = createClient();
-  const redirectURL = getURL('/auth/callback');
+  const redirectURL = getURL("/auth/callback");
   await supabase.auth.signInWithOAuth({
     provider: provider,
     options: {
-      redirectTo: redirectURL
-    }
+      redirectTo: redirectURL,
+    },
   });
 }
+
+export const checkUserStatus = async (
+  router: AppRouterInstance,
+  setLoading: (loading: boolean) => void
+) => {
+  const supabase = createClient();
+  try {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) {
+      router.push("/signin");
+      return;
+    }
+
+    const userId = data.user.id;
+
+    //  Check if signup is completed
+    const { data: profile, error: profileError } = await supabase
+      .from("users")
+      .select("signup_completed")
+      .eq("id", userId)
+      .single();
+
+    if (profileError || !profile?.signup_completed) {
+      router.push("/signin/signup");
+      return;
+    }
+  } catch (error) {
+    console.error("Error checking user status:", error);
+    router.push("/signin");
+    return;
+  } finally {
+    setLoading(false);
+  }
+};
